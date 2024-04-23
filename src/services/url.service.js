@@ -1,5 +1,5 @@
 ////local url
-export const url = "http://localhost:4051";
+export const url = "http://127.0.0.1:4051";
 // export const url = "http://192.168.0.34:4051";
 // export const url = "http://192.168.0.16:4050";
 /////live url
