@@ -188,7 +188,7 @@ export default function AllLeads() {
           filterSelected,
           searchQuery && searchQuery != "" ? searchQuery : null,
           selectedSchool ? selectedSchool : null,
-          selectedCompany ? selectedCompany?.value : null
+          selectedCompany ? selectedCompany: null
         );
       }
     } catch (err) {
@@ -210,7 +210,7 @@ export default function AllLeads() {
           filterSelected,
           searchQuery && searchQuery != "" ? searchQuery : null,
           selectedSchool ? selectedSchool : null,
-          selectedCompany ? selectedCompany?.value : null
+          selectedCompany ? selectedCompany : null
         );
       }
     } catch (err) {
@@ -380,7 +380,7 @@ export default function AllLeads() {
           null,
           searchQuery && searchQuery != "" ? searchQuery : null,
           selectedSchool ? selectedSchool : null,
-          selectedCompany ? selectedCompany?.value : null
+          selectedCompany ? selectedCompany : null
         );
       }
     } catch (err) {
@@ -400,7 +400,7 @@ export default function AllLeads() {
       filterSelected,
       searchQuery && searchQuery != "" ? searchQuery : null,
       selectedSchool ? selectedSchool : null,
-      selectedCompany ? selectedCompany?.value : null
+      selectedCompany ? selectedCompany : null
     );
     handleGet();
     handleGetLeadStatus();
@@ -419,7 +419,7 @@ export default function AllLeads() {
         "assigned",
         searchQuery && searchQuery != "" ? searchQuery : null,
         selectedSchool ? selectedSchool : null,
-        selectedCompany ? selectedCompany?.value : null
+        selectedCompany ? selectedCompany : null
       );
       setPage(0);
     } else if (value == "un-assigned") {
@@ -429,7 +429,7 @@ export default function AllLeads() {
         "un-assigned",
         searchQuery && searchQuery != "" ? searchQuery : null,
         selectedSchool ? selectedSchool : null,
-        selectedCompany ? selectedCompany?.value : null
+        selectedCompany ? selectedCompany : null
       );
       setPage(0);
     } else if (value == "all") {
@@ -439,7 +439,7 @@ export default function AllLeads() {
         "all",
         searchQuery && searchQuery != "" ? searchQuery : null,
         selectedSchool ? selectedSchool : null,
-        selectedCompany ? selectedCompany?.value : null
+        selectedCompany ? selectedCompany : null
       );
       setPage(0);
     }
@@ -533,7 +533,7 @@ export default function AllLeads() {
       filterSelected,
       searchQuery && searchQuery != "" ? searchQuery : null,
       selectedSchool ? selectedSchool : null,
-      selectedCompany ? selectedCompany?.value : null
+      selectedCompany ? selectedCompany : null
     );
     setLimit(newPerPage);
   };
@@ -547,7 +547,7 @@ export default function AllLeads() {
         filterSelected,
         searchQuery && searchQuery != "" ? searchQuery : null,
         selectedSchool ? selectedSchool : null,
-        selectedCompany ? selectedCompany?.value : null
+        selectedCompany ? selectedCompany : null
       );
     }
   };
@@ -595,7 +595,7 @@ export default function AllLeads() {
       1000
     ),
 
-    [] // will be created only once initially
+    [selectedCompany, selectedSchool] // will be created only once initially
   );
 
   // highlight-ends
@@ -820,14 +820,16 @@ export default function AllLeads() {
                                     limit,
                                     null,
                                     searchQuery != "" ? searchQuery : null,
-                                    null
+                                    null,
+                                    selectedCompany ?? null
                                   )
                                   : handleGetLeads(
                                     limit * page,
                                     limit,
                                     null,
                                     searchQuery != "" ? searchQuery : null,
-                                    e.value
+                                    e.target.value,
+                                    selectedCompany ?? null
                                   );
                                 setSelectedSchool(e.target.value);
                               }}
@@ -859,7 +861,7 @@ export default function AllLeads() {
                                   limit,
                                   null,
                                   searchQuery != "" ? searchQuery : null,
-                                  selectedCompany ? selectedCompany : null,
+                                  selectedSchool ? selectedSchool : null,
                                   e.target.value
                                 );
                                 setSelectedCompany(e.target.value);
