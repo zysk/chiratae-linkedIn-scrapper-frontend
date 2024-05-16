@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select';
+import { Buffer } from 'buffer';
 import { campaignCheckLogin, campaignSendCaptcha, campaignLinklogin, continueScheduledAfterLogin, linkedInProfileScrapping } from '../../services/Campaign.service';
 import { getlinkedInAccount } from '../../services/LinkedInAccounts.service';
 import { toastError } from '../../utils/toastUtils';
@@ -107,7 +108,7 @@ export default function ScheduleCampaignLogin() {
                 return
             }
 
-            let { data: res } = await campaignLinklogin({ accountName, password })
+            let { data: res } = await campaignLinklogin({ accountName, password : Buffer.from(password).toString("base64")})
             console.log("login res",res)
             if (res.isCaptcha || res.imgUrl) {
                 toastSuccess("Captcha Verification Needed")

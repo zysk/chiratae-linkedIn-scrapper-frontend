@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { Buffer } from 'buffer';
 import ReactSelect from 'react-select';
 import { addEmailSettings, getEmailSettings } from '../../services/EmailSettings.service';
 import { CreateLeadStatus } from '../../services/LeadStatus.service';
@@ -99,7 +100,7 @@ export default function EmailSettings() {
                 mailHost,
                 mailPort,
                 mailUserName,
-                mailUserPassword,
+                mailUserPassword: Buffer.from(mailUserPassword).toString("base64"),
                 mailEncryption,
                 mailService
             };

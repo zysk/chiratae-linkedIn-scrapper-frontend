@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React, { useState, useEffect } from 'react'
+import { Buffer } from 'buffer';
 import Select from 'react-select';
 import { campaignCheckLogin, campaignCreateForLinkedin, campaignLinkSearch, campaignScheduleForLinkedin, campaignSendCaptcha, campaignLinklogin, searchFromLinkedin, logoutAccount, addCampaignToQueue } from '../../services/Campaign.service';
 import { getlinkedInAccount } from '../../services/LinkedInAccounts.service';
@@ -344,7 +345,7 @@ export default function AddCampaign() {
                 return
             }
 
-            let { data: res } = await campaignLinklogin({ accountName, password })
+            let { data: res } = await campaignLinklogin({ accountName, password: Buffer.from(password).toString("base64") })
             if (res.isCaptcha || res.imgUrl) {
                 toastSuccess("Captcha Verification Needed")
                 console.log("res", res)
