@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { images } from "../Images/Images";
+import { Buffer } from "buffer";
 import CustomButton from "../Utility/Button";
 import { DashboardBox } from "../Utility/DashboardBox";
 import { useDispatch } from "react-redux";
@@ -23,7 +24,7 @@ function Login({ Unauth }) {
   const handleSubmit = () => {
     let obj = {
       email,
-      password,
+      password: Buffer.from(password).toString("base64"),
     };
     dispatch(loginUser(obj));
   };

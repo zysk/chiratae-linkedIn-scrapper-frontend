@@ -1,5 +1,6 @@
 import { Input, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
+import { Buffer } from 'buffer';
 import { createlinkedInAccount } from '../../services/LinkedInAccounts.service';
 import { addUser, updateUser } from '../../services/users.service';
 import { toastError, toastSuccess } from '../../utils/toastUtils';
@@ -52,7 +53,7 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
                 role: "USER"
             };
             if (password != "") {
-                obj.password = password
+                obj.password = Buffer.from(password).toString("base64")
             }
             if (selectedUser && selectedUser.name) {
                 let { data: res } = await updateUser(obj, selectedUser?._id);

@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
+import {Buffer} from 'buffer';
 import { createlinkedInAccount } from '../../services/LinkedInAccounts.service';
 import { toastError, toastSuccess } from '../../utils/toastUtils';
 import CustomButton from '../Utility/Button';
@@ -22,10 +23,9 @@ export default function AddLinkedInAccount({ makeChange }) {
                 return;
             }
 
-
             let obj = {
                 name,
-                password,
+                password: Buffer.from(password).toString("base64"),
             };
             let { data: res } = await createlinkedInAccount(obj);
             if (res.success) {
@@ -56,7 +56,7 @@ export default function AddLinkedInAccount({ makeChange }) {
                     {/* <label className="blue-1 fs-12">
                         Password <span className="red">*</span>
                     </label> */}
-                    <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label="Password" value={password} onChange={(event) => setPassword(event.target.value)} type="text" className="form-control" />
+                    <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label="Password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} className="form-control" />
                 </div>
 
 
