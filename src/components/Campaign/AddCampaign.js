@@ -190,6 +190,8 @@ export default function AddCampaign() {
             else {
                 toastSuccess("Login Successful")
                 checkLoginOnInit()
+                setImageData(null)
+                setShowLogin(false)
             }
 
         } catch (error) {
@@ -550,7 +552,7 @@ export default function AddCampaign() {
                                         <h6 className="blue-1 mt-2">
                                             Pick the image number that is the correct way up
                                         </h6>
-                                        <input type="text" className='form-control' placeholder='School' value={imageNumber} onChange={(e) => setImageNUmber(e.target.value)} />
+                                        <input type="text" className='form-control' placeholder='Enter correct image number' value={imageNumber} onChange={(e) =>setImageNUmber(e.target.value)} />
                                         <button onClick={() => handleCaptcha()} type={"button"} style={{ outline: "none", border: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, backgroundColor: "#D68392", marginTop: "15px", color: 'white' }}>{loading ? 'Loading...' : 'Run Now'}</button>
                                     </>
 
