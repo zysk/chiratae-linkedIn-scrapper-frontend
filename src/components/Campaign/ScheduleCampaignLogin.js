@@ -21,6 +21,7 @@ export default function ScheduleCampaignLogin() {
     const [showLogin, setShowLogin] = useState(false)
     const [disableAllButton, setDisableAllButton] = useState(false)
     const [imageData, setImageData] = useState('')
+    const [captchaMessage, setCaptchaMessage] = useState('')
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -39,6 +40,7 @@ export default function ScheduleCampaignLogin() {
 
                 toastSuccess("Captcha Verification Needed")
                 setImageData(res.data.imgUrl)
+                setCaptchaMessage(res.data.captchaMessage)
             }
             else {
                 toastSuccess("Login Successful")
@@ -114,6 +116,7 @@ export default function ScheduleCampaignLogin() {
                 toastSuccess("Captcha Verification Needed")
                 console.log("res", res)
                 setImageData(res.imgUrl)
+                setCaptchaMessage(res.captchaMessage)
                 setLoading(false)
             }
             else {
@@ -203,7 +206,7 @@ export default function ScheduleCampaignLogin() {
                                     <h6 className="blue-1 mt-2">Captcha Required</h6>
                                     <img src={imageData} alt="" srcset="" style={{ height: 200, width: 300 }} />
                                     <h6 className="blue-1 mt-2">
-                                        Pick the image number that is the correct way up
+                                        {captchaMessage}
                                     </h6>
                                     <input type="text" className='form-control' placeholder='School' value={imageNumber} onChange={(e) => setImageNUmber(e.target.value)} />
                                     <button onClick={() => handleCaptcha()} type={"button"} style={{ outline: "none", border: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, backgroundColor: "#000000", marginTop: "15px", color: 'white' }}>{loadingCheckLoggedIn ? 'Loading...' : 'Run Now'}</button>
