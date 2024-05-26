@@ -188,11 +188,11 @@ export default function AddCampaign() {
         setImageData(res.data.imgUrl);
         setCaptchaMessage(res.data.captchaMessage);
       } else {
-        toastSuccess("Login Successful");
 		setVerification({
 			otpMessage: res.data.otpMessage,
 			otpRequired: res.data.otpRequired,
 		});
+		toastSuccess("Login Successful");
         checkLoginOnInit();
         setImageData(null);
         setCaptchaMessage(null);
@@ -727,6 +727,37 @@ export default function AddCampaign() {
                   </>
                 )}
 
+                {!imageData && verification.otpRequired && (
+                  <>
+                    <h6 className="blue-1 mt-2">OTP Required</h6>
+                    <h6 className="blue-1 mt-2">{verification.otpMessage}</h6>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter correct otp"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                    />
+                    <button
+                      onClick={() => handleOtpVerification()}
+                      type={"button"}
+                      style={{
+                        outline: "none",
+                        border: "none",
+                        width: 300,
+                        marginRight: 10,
+                        padding: "10px 70px",
+                        borderRadius: 10,
+                        backgroundColor: "#D68392",
+                        marginTop: "15px",
+                        color: "white",
+                      }}
+                    >
+                      {loading ? "Loading..." : "Run Now"}
+                    </button>
+                  </>
+                )}
+
                 {schedule && (
                   <div
                     className="mt-4"
@@ -736,38 +767,6 @@ export default function AddCampaign() {
                       justifyContent: "flex-start",
                     }}
                   >
-                    {!imageData && verification.otpRequired && (
-                      <>
-                        <h6 className="blue-1 mt-2">OTP Required</h6>
-                        <h6 className="blue-1 mt-2">
-                          {verification.otpMessage}
-                        </h6>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Enter correct otp"
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                        />
-                        <button
-                          onClick={() => handleOtpVerification()}
-                          type={"button"}
-                          style={{
-                            outline: "none",
-                            border: "none",
-                            width: 300,
-                            marginRight: 10,
-                            padding: "10px 70px",
-                            borderRadius: 10,
-                            backgroundColor: "#D68392",
-                            marginTop: "15px",
-                            color: "white",
-                          }}
-                        >
-                          {loading ? "Loading..." : "Run Now"}
-                        </button>
-                      </>
-                    )}
                     <input
                       type="date"
                       value={scheduleDate}
