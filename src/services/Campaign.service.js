@@ -15,7 +15,6 @@ export const addDealToSavanta = (id) => {
     return axiosApiInstance.post(serverUrl + `/addDealToSavanta/${id}`, { timeout: 10000000000000 });
 };
 
-
 export const addCampaignToQueue = (obj) => {
     return axiosApiInstance.post(serverUrl + `/addCampaignToQueue`, obj, { timeout: 10000000000000 });
 };
@@ -35,18 +34,19 @@ export const campaignLinklogin = (formData) => {
     return axiosApiInstance.post(serverUrl + "/linklogin", formData, { timeout: 10000000000000 });
 };
 
-
-
 export const campaignSendCaptcha = (formData) => {
     return axiosApiInstance.post(serverUrl + "/linkCaptcha", formData, { timeout: 10000000000000 });
 };
 
+export const campaignVerifyOtp = (formData) => {
+  return axiosApiInstance.post(serverUrl + "/verifyOtp", formData, {
+    timeout: 10000000000000,
+  });
+};
 
 export const campaignLinkSearch = (formData) => {
     return axiosApiInstance.post(serverUrl + "/linkSearch", formData, { timeout: 10000000000000 });
 };
-
-
 
 export const campaignScheduleForLinkedin = (formData) => {
     return axiosApiInstance.post(serverUrl + "/campaignScheduleLinkedin", formData);
@@ -55,6 +55,7 @@ export const campaignScheduleForLinkedin = (formData) => {
 export const getcampaigns = (formData) => {
     return axiosApiInstance.get(serverUrl + "/getcampaigns", formData);
 };
+
 export const getPastcampaignById = (id) => {
     return axiosApiInstance.get(serverUrl + `/getPastcampaignById/${id}`);
 };

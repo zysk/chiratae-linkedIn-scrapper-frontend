@@ -12,6 +12,7 @@ import {
   searchFromLinkedin,
   logoutAccount,
   addCampaignToQueue,
+  campaignVerifyOtp,
 } from "../../services/Campaign.service";
 import { getlinkedInAccount } from "../../services/LinkedInAccounts.service";
 import { getproxies } from "../../services/Proxy.service";
@@ -65,6 +66,11 @@ export default function AddCampaign() {
   const [company, setCompany] = useState(
     "Stealth, Stealth startup, stealth company"
   );
+  const [verification, setVerification] = useState({
+    otpMessage: "",
+    otpRequired: "",
+  });
+  const [otp, setOtp] = useState("");
   const [resultObj, setResultObj] = useState({});
   const [name, setName] = useState("");
   const [linkedInAccountId, setLinkedInAccountId] = useState("");
@@ -183,6 +189,10 @@ export default function AddCampaign() {
         setCaptchaMessage(res.data.captchaMessage);
       } else {
         toastSuccess("Login Successful");
+		setVerification({
+			otpMessage: res.data.otpMessage,
+			otpRequired: res.data.otpRequired,
+		});
         checkLoginOnInit();
         setImageData(null);
         setCaptchaMessage(null);
@@ -193,7 +203,22 @@ export default function AddCampaign() {
     }
     setLoading(false);
   };
-
+  const handleOtpVerification = async () => {
+    console.log("otp", otp);
+    setLoading(true);
+    try {
+      let obj = {
+        otp,
+      };
+      let res = await campaignVerifyOtp(obj);
+      // setDisableAllButton(true);
+      console.log("ress", res);
+    } catch (error) {
+      console.log("ress", error);
+      toastError(error);
+    }
+    setLoading(false);
+  };
   const checkLoginOnInit = async () => {
     try {
       setLoading(true);
@@ -463,7 +488,7 @@ export default function AddCampaign() {
                 <div className="col-lg-12 py-4">
                   <div className="borderbotm"></div>
                 </div>
-                {/* 
+                {/*
                             <h6 className="blue-1 mt-1">Or Input One Time Link</h6>
                             <input type="text" className='form-control' placeholder='One Time Link' value={oneTimeLink} onChange={(e) => setOneTimeLink(e.target.value)} />
 
@@ -674,9 +699,7 @@ export default function AddCampaign() {
                       srcset=""
                       style={{ height: 200, width: 300 }}
                     />
-                    <h6 className="blue-1 mt-2">
-                      {captchaMessage}
-                    </h6>
+                    <h6 className="blue-1 mt-2">{captchaMessage}</h6>
                     <input
                       type="text"
                       className="form-control"
@@ -713,6 +736,38 @@ export default function AddCampaign() {
                       justifyContent: "flex-start",
                     }}
                   >
+                    {!imageData && verification.otpRequired && (
+                      <>
+                        <h6 className="blue-1 mt-2">OTP Required</h6>
+                        <h6 className="blue-1 mt-2">
+                          {verification.otpMessage}
+                        </h6>
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Enter correct otp"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                        />
+                        <button
+                          onClick={() => handleOtpVerification()}
+                          type={"button"}
+                          style={{
+                            outline: "none",
+                            border: "none",
+                            width: 300,
+                            marginRight: 10,
+                            padding: "10px 70px",
+                            borderRadius: 10,
+                            backgroundColor: "#D68392",
+                            marginTop: "15px",
+                            color: "white",
+                          }}
+                        >
+                          {loading ? "Loading..." : "Run Now"}
+                        </button>
+                      </>
+                    )}
                     <input
                       type="date"
                       value={scheduleDate}
