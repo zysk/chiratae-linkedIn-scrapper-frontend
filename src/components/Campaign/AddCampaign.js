@@ -193,7 +193,7 @@ export default function AddCampaign() {
 			otpRequired: res.data.otpRequired,
 		});
 		toastSuccess("Login Successful");
-        checkLoginOnInit();
+        // checkLoginOnInit();
         setImageData(null);
         setCaptchaMessage(null);
         setShowLogin(false);
