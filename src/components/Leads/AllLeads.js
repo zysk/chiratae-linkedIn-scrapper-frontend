@@ -84,7 +84,6 @@ export default function AllLeads() {
     { label: "Zoho", value: "Zoho" },
   ];
 
-
   let user = useSelector((state) => state.auth.user);
   let role = useSelector((state) => state.auth.role);
   const navigate = useNavigate();
@@ -188,7 +187,7 @@ export default function AllLeads() {
           filterSelected,
           searchQuery && searchQuery != "" ? searchQuery : null,
           selectedSchool ? selectedSchool : null,
-          selectedCompany ? selectedCompany: null
+          selectedCompany ? selectedCompany : null
         );
       }
     } catch (err) {
@@ -259,20 +258,22 @@ export default function AllLeads() {
     {
       name: "Current Company",
       cell: (row) => (
-        <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${row?.clientObj?.experienceArr?.length > 0
-          ? `${row?.clientObj?.experienceArr[0]?.companyDetail} | ${row?.clientObj?.experienceArr[0]?.company}`
-          : "NA"
-          }`}</div>
+        <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${
+          row?.clientObj?.experienceArr?.length > 0
+            ? `${row?.clientObj?.experienceArr[0]?.companyDetail} | ${row?.clientObj?.experienceArr[0]?.company}`
+            : "NA"
+        }`}</div>
       ),
       width: "14%",
     },
     {
       name: "Previous Company",
       cell: (row) => (
-        <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${row?.clientObj?.experienceArr?.length > 1
-          ? `${row?.clientObj?.experienceArr[1]?.companyDetail} | ${row?.clientObj?.experienceArr[1]?.company}`
-          : "NA"
-          }`}</div>
+        <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${
+          row?.clientObj?.experienceArr?.length > 1
+            ? `${row?.clientObj?.experienceArr[1]?.companyDetail} | ${row?.clientObj?.experienceArr[1]?.company}`
+            : "NA"
+        }`}</div>
       ),
       width: "14%",
     },
@@ -284,7 +285,7 @@ export default function AllLeads() {
     {
       name: "Last Updated On",
       selector: (row) => `${new Date(row?.createdAt).toDateString()}`,
-      width: "12%"
+      width: "12%",
     },
     {
       name: "Rating",
@@ -331,6 +332,115 @@ export default function AllLeads() {
       width: "10%",
     },
   ]);
+
+  useEffect(() => {
+    setCategory_columns([
+      {
+        name: "ID",
+        selector: (row, index) => index + 1,
+        sortable: true,
+        width: "5%",
+      },
+      // {
+      //     name: "Campaign Name",
+      //     selector: (row) => row?.campaignObj?.name,
+      //     width: "10%"
+
+      // },
+      {
+        name: "Founder Name",
+        cell: (row) => (
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => handleRedirect(row?._id)}
+          >
+            {" "}
+            {row?.clientObj?.name}{" "}
+          </div>
+        ),
+        width: "12%",
+      },
+      {
+        name: "Current Company",
+        cell: (row) => (
+          <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${
+            row?.clientObj?.experienceArr?.length > 0
+              ? `${row?.clientObj?.experienceArr[0]?.companyDetail} | ${row?.clientObj?.experienceArr[0]?.company}`
+              : "NA"
+          }`}</div>
+        ),
+        width: "14%",
+      },
+      {
+        name: "Previous Company",
+        cell: (row) => (
+          <div style={{ flex: "flex", flexWrap: "wrap" }}>{`${
+            row?.clientObj?.experienceArr?.length > 1
+              ? `${row?.clientObj?.experienceArr[1]?.companyDetail} | ${row?.clientObj?.experienceArr[1]?.company}`
+              : "NA"
+          }`}</div>
+        ),
+        width: "14%",
+      },
+      // {
+      //     name: "Lead Assigned to",
+      //     selector: (row) => row?.leadAssignedToObj?.name ? row?.leadAssignedToObj?.name : "N.A.",
+      //     width: "12%"
+      // },
+      {
+        name: "Last Updated On",
+        selector: (row) => `${new Date(row?.createdAt).toDateString()}`,
+        width: "12%",
+      },
+      {
+        name: "Rating",
+        selector: (row) => `${row.rating}`,
+        width: "12%",
+      },
+      {
+        name: "Status",
+        width: "15%",
+        cell: (row) => (
+          <div style={{ width: 170 }}>
+            {" "}
+            <Select
+              value={{ label: row.status, value: row.status }}
+              onChange={(e) => {
+                console.log(e);
+                handleStatusChange(e.value, row);
+              }}
+              options={
+                leadsStatusArr.map((el) => ({
+                  label: el.value,
+                  value: el.value,
+                }))
+                //     [
+                //     { label: leadStatusObj.CLOSED, value: leadStatusObj.CLOSED },
+                //     { label: leadStatusObj.CONTACTAGAIN, value: leadStatusObj.CONTACTAGAIN },
+                //     { label: leadStatusObj.CREATED, value: leadStatusObj.CREATED },
+                //     { label: leadStatusObj.DORMANT, value: leadStatusObj.DORMANT },
+                //     { label: leadStatusObj.WORKINPROGRESS, value: leadStatusObj.WORKINPROGRESS },
+                // ]
+              }
+            />
+          </div>
+        ),
+      },
+      {
+        name: "Visit",
+        cell: (row) => (
+          <a
+            className="btn btn-1 text-white"
+            target={"_blank"}
+            href={`${row.clientObj?.link}`}
+          >
+            Visit
+          </a>
+        ),
+        width: "10%",
+      },
+    ]);
+  }, [category_columns, leadsStatusArr]);
 
   useEffect(() => {
     if (category_columns.some((el) => el.name != "Action")) {
@@ -816,21 +926,21 @@ export default function AllLeads() {
                               onChange={(e) => {
                                 e.target.value == ""
                                   ? handleGetLeads(
-                                    limit * page,
-                                    limit,
-                                    null,
-                                    searchQuery != "" ? searchQuery : null,
-                                    null,
-                                    selectedCompany ?? null
-                                  )
+                                      limit * page,
+                                      limit,
+                                      null,
+                                      searchQuery != "" ? searchQuery : null,
+                                      null,
+                                      selectedCompany ?? null
+                                    )
                                   : handleGetLeads(
-                                    limit * page,
-                                    limit,
-                                    null,
-                                    searchQuery != "" ? searchQuery : null,
-                                    e.target.value,
-                                    selectedCompany ?? null
-                                  );
+                                      limit * page,
+                                      limit,
+                                      null,
+                                      searchQuery != "" ? searchQuery : null,
+                                      e.target.value,
+                                      selectedCompany ?? null
+                                    );
                                 setSelectedSchool(e.target.value);
                               }}
                             >
@@ -840,7 +950,6 @@ export default function AllLeads() {
                             </MuiSelect>
                           </FormControl>
                         </Box>
-
                       </div>
                       <div className="col-4">
                         <Box sx={{ minWidth: 120 }}>
@@ -873,8 +982,6 @@ export default function AllLeads() {
                             </MuiSelect>
                           </FormControl>
                         </Box>
-
-
                       </div>
                     </div>
                   </div>
@@ -1032,10 +1139,10 @@ export default function AllLeads() {
                     options={
                       userArr && userArr?.length > 0
                         ? userArr.map((el) => ({
-                          label: `${el.name}`,
-                          value: el._id,
-                          ...el,
-                        }))
+                            label: `${el.name}`,
+                            value: el._id,
+                            ...el,
+                          }))
                         : []
                     }
                   />
@@ -1094,10 +1201,10 @@ export default function AllLeads() {
                     options={
                       userArr && userArr?.length > 0
                         ? userArr.map((el) => ({
-                          label: `${el.name}`,
-                          value: el._id,
-                          ...el,
-                        }))
+                            label: `${el.name}`,
+                            value: el._id,
+                            ...el,
+                          }))
                         : []
                     }
                   />
@@ -1171,15 +1278,15 @@ export default function AllLeads() {
                     btnStyle={
                       leadDetailsVisible == 1
                         ? {
-                          backgroundColor: "#D68392",
-                          color: "white",
-                          border: "solid 1px white",
-                        }
+                            backgroundColor: "#D68392",
+                            color: "white",
+                            border: "solid 1px white",
+                          }
                         : {
-                          backgroundColor: "white",
-                          color: "black",
-                          border: "solid 1px black",
-                        }
+                            backgroundColor: "white",
+                            color: "black",
+                            border: "solid 1px black",
+                          }
                     }
                     ClickEvent={(e) => {
                       e.preventDefault();
@@ -1198,15 +1305,15 @@ export default function AllLeads() {
                     btnStyle={
                       leadDetailsVisible == 2
                         ? {
-                          backgroundColor: "#D68392",
-                          color: "white",
-                          border: "solid 1px white",
-                        }
+                            backgroundColor: "#D68392",
+                            color: "white",
+                            border: "solid 1px white",
+                          }
                         : {
-                          backgroundColor: "white",
-                          color: "black",
-                          border: "solid 1px black",
-                        }
+                            backgroundColor: "white",
+                            color: "black",
+                            border: "solid 1px black",
+                          }
                     }
                     ClickEvent={(e) => {
                       e.preventDefault();
@@ -1462,12 +1569,12 @@ export default function AllLeads() {
                                     <td>
                                       {el?.createdAt
                                         ? `${new Date(
-                                          el?.createdAt
-                                        ).toDateString()} at ${new Date(
-                                          el.createdAt
-                                        ).getHours()}:${new Date(
-                                          el.createdAt
-                                        ).getMinutes()}`
+                                            el?.createdAt
+                                          ).toDateString()} at ${new Date(
+                                            el.createdAt
+                                          ).getHours()}:${new Date(
+                                            el.createdAt
+                                          ).getMinutes()}`
                                         : "N.A."}
                                     </td>
                                   </tr>
