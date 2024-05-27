@@ -76,7 +76,14 @@ export default function Profile({ selectedUser, setSelectedUser, setChange }) {
                     mailService
                 }
             };
-            let { data: res } = await updateUser(obj, user?._id);
+            let { data: res } = await updateUser(
+              {
+                ...obj,
+                mailUserPassword:
+                  Buffer.from(mailUserPassword).toString("base64"),
+              },
+              user?._id
+            );
             if (res.success) {
                 toastSuccess(res.message);
             }
