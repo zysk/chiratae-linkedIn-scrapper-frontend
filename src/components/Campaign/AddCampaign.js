@@ -181,7 +181,13 @@ export default function AddCampaign() {
         imageNumber: imageNumber,
       };
       let res = await campaignSendCaptcha(obj);
+      console.log("res", res);
       setDisableAllButton(true);
+
+      if(res?.data?.error){
+        toastError(res?.data?.error);
+        checkLoginOnInit();
+      }
       if (res?.data?.isCaptcha == false && res?.data?.otpRequired == false) {
         checkLoginOnInit();
         toastSuccess("Login Successful");
@@ -207,6 +213,7 @@ export default function AddCampaign() {
     }
     setLoading(false);
   };
+
   const handleOtpVerification = async () => {
     setLoading(true);
     try {
@@ -234,6 +241,7 @@ export default function AddCampaign() {
     }
     setLoading(false);
   };
+
   const checkLoginOnInit = async () => {
     try {
       setLoading(true);
@@ -369,18 +377,25 @@ export default function AddCampaign() {
         return;
       }
 
+      
       let { data: res } = await campaignLinklogin({
         accountName,
         password: Buffer.from(password).toString("base64"),
       });
+      
+      if (res?.error) {
+        toastError(res?.error);
+        checkLoginOnInit();
+      }
+
       if (res.captcha) {
-        toastSuccess("Captcha Verification Needed");
+        toastWarning("Captcha Verification Needed");
         console.log("res", res);
         setImageData(res.imgUrl);
         setCaptchaMessage(res.captchaMessage);
         setLoading(false);
       } else if (res.otpRequired) {
-        toastSuccess("Otp Verification Needed");
+        toastWarning("Otp Verification Needed");
         setVerification({
           otpMessage: res?.otpMessage,
           otpRequired: res?.otpRequired,
