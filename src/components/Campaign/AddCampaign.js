@@ -182,17 +182,21 @@ export default function AddCampaign() {
       };
       let res = await campaignSendCaptcha(obj);
       setDisableAllButton(true);
-      console.log(res.data);
-      if (res.data.isCaptcha) {
+      if (res?.data?.isCaptcha == false && res?.data?.otpRequired == false) {
+        checkLoginOnInit();
+        toastSuccess("Login Successful");
+        setImageData(null);
+        setCaptchaMessage(null);
+        setShowLogin(false);
+      } else if (res.data.isCaptcha) {
         toastSuccess("Captcha Verification Needed");
         setImageData(res.data.imgUrl);
         setCaptchaMessage(res.data.captchaMessage);
       } else {
-		setVerification({
-			otpMessage: res.data.otpMessage,
-			otpRequired: res.data.otpRequired,
-		});
-		toastSuccess("Login Successful");
+        setVerification({
+          otpMessage: res.data.otpMessage,
+          otpRequired: res.data.otpRequired,
+        });
         // checkLoginOnInit();
         setImageData(null);
         setCaptchaMessage(null);
@@ -204,7 +208,6 @@ export default function AddCampaign() {
     setLoading(false);
   };
   const handleOtpVerification = async () => {
-    console.log("otp", otp);
     setLoading(true);
     try {
       let obj = {
@@ -213,6 +216,18 @@ export default function AddCampaign() {
       let res = await campaignVerifyOtp(obj);
       // setDisableAllButton(true);
       console.log("ress", res);
+      if (res?.data?.otpRequired == false) {
+        setVerification(null);
+        checkLoginOnInit();
+        toastSuccess("Login Successful");
+      } else if (
+        res?.data?.otpRequired == false &&
+        res?.data?.isCaptcha == false
+      ) {
+        checkLoginOnInit();
+        toastSuccess("Login Successful");
+      }
+      // setVerification(null);
     } catch (error) {
       console.log("ress", error);
       toastError(error);
@@ -348,12 +363,7 @@ export default function AddCampaign() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      console.log(
-        isLoggedIn,
-        accountName == "" && password == "",
-        isLoggedIn == false && accountName == "" && password == "",
-        "av"
-      );
+
       if (isLoggedIn == false && accountName == "" && password == "") {
         toastError("Please select account to login with");
         return;
@@ -363,17 +373,29 @@ export default function AddCampaign() {
         accountName,
         password: Buffer.from(password).toString("base64"),
       });
-      if (res.isCaptcha || res.imgUrl) {
+      if (res.captcha) {
         toastSuccess("Captcha Verification Needed");
         console.log("res", res);
         setImageData(res.imgUrl);
         setCaptchaMessage(res.captchaMessage);
         setLoading(false);
+      } else if (res.otpRequired) {
+        toastSuccess("Otp Verification Needed");
+        setVerification({
+          otpMessage: res?.otpMessage,
+          otpRequired: res?.otpRequired,
+        });
+        setLoading(false);
       } else {
         toastSuccess("login Successfull");
+        // setVerification(null);
         setIsLoggedIn(true);
         setShowLogin(false);
         setLoading(false);
+
+        setImageData(null);
+        setCaptchaMessage(null);
+        checkLoginOnInit();
       }
     } catch (err) {
       setLoading(true);
@@ -411,6 +433,8 @@ export default function AddCampaign() {
     console.log(value);
     setProxyId(value.value);
   };
+
+  console.log("verification", verification);
 
   return (
     <div className="newpaddingtoplefgt">
@@ -727,7 +751,7 @@ export default function AddCampaign() {
                   </>
                 )}
 
-                {!imageData && verification.otpRequired && (
+                {verification.otpRequired && (
                   <>
                     <h6 className="blue-1 mt-2">OTP Required</h6>
                     <h6 className="blue-1 mt-2">{verification.otpMessage}</h6>
