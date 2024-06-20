@@ -315,7 +315,7 @@ function SideBar() {
     <div id="sidebar">
       <div className={sideBarOpen ? "main-logo" : "main-logo-reverse"}>
         {/* <h1><b>LOGO</b></h1> */}
-        <img src={images.logo} alt="" />
+        {/* <img src={images.logo} alt="" /> */}
       </div>
       <ul className="sidebar-menu" id="sidebarMenu">
         {sidebar_item.map((item, i) => {

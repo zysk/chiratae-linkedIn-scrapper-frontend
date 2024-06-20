@@ -35,7 +35,7 @@ function Login({ Unauth }) {
           {Unauth && (
             <div className="text-center col-lg-4 mx-auto mb-4">
               <div className="main-logo mx-auto mb-4">
-                <img src={images.logo} alt="" />
+                {/* <img src={images.logo} alt="" /> */}
               </div>
               <h5>Welcome back,</h5>
               <h5>Please login to your account</h5>
