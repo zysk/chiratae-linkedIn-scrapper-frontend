@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function CustomButton({
+  disabled,
   innerRef,
   parentProps,
   iconName,
@@ -70,7 +71,7 @@ function CustomButton({
   return (
     <>
       {isBtn && (
-        <button {...parentProps} ref={innerRef} type={btntype} role="button" className={LinkClass(roundedPill, small)} onClick={ClickEvent}>
+        <button disabled={disabled} {...parentProps} ref={innerRef} type={btntype} role="button" className={LinkClass(roundedPill, small)} onClick={ClickEvent}>
           {!noIcon && <i className={`${iconName} me-2`}></i>}
           {btnName}
         </button>
@@ -97,12 +98,12 @@ function CustomButton({
         </Link>
       )}
       {redBtn && (
-        <button {...parentProps} ref={innerRef} role="button" className="btn btn-red">
+        <button disabled={disabled} {...parentProps} ref={innerRef} role="button" className="btn btn-red">
           {btnName}
         </button>
       )}
       {navPills && (
-        <button {...parentProps} ref={innerRef} type="button" role="tab" className={PillClass()} onClick={ClickEvent} aria-selected={pillActive ? true : false} data-type={navDataType}>
+        <button disabled={disabled} {...parentProps} ref={innerRef} type="button" role="tab" className={PillClass()} onClick={ClickEvent} aria-selected={pillActive ? true : false} data-type={navDataType}>
           {btnName}
         </button>
       )}

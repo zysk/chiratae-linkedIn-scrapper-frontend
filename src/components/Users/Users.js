@@ -7,12 +7,44 @@ import CustomButton from '../Utility/Button';
 import { DashboardBox, DashboardTable } from '../Utility/DashboardBox';
 import { toastError, toastSuccess } from '../Utility/ToastUtils';
 import AddUsers from './AddUsers';
+import { ConfirmModal } from '../Utility/ConfirmationModal';
+
+const COMFIRMATION_DATA = {
+    update_user: {
+        type:"update_user",
+        heading: "Are you sure ?", 
+        title:"You can't revert changes"
+    },
+    delete_user: {
+        type:"delete_user",
+        heading: "Are you sure ?", 
+        title:"You can't revert changes"
+    }
+  }
 
 export default function Users() {
     // ==============================================================================================================
     const [userArr, setUserArr] = useState([]);
     const [selectedUser, setSelectedUser] = useState({});
     const [change, setChange] = useState(0);
+    const [confirmModal, setConfirmModal] = useState(false);
+    const[confirmModalData,setConfirmModalData] = useState({})
+    const openConfirmModal = (data,row_id)=>{
+        setConfirmModal(true);
+        setConfirmModalData({...data,row_id});
+    }
+    
+    const OnModalConfirm = (data) => {
+        setConfirmModal(false);
+        switch (data.type){
+            case"delete_user":{
+                handleDelete(data.row_id);
+            break;
+            }
+            default :
+            console.log("Default case");
+        }
+    }
     const category_columns = [
         {
             name: "ID",
@@ -47,7 +79,7 @@ export default function Users() {
                 <>
                     <ActionIcon
                         isRedirected={true}
-                        onDeleteClick={() => handleDelete(row._id)}
+                        onDeleteClick={() => openConfirmModal(COMFIRMATION_DATA['delete_user'],row._id)}
                         deletePath="/Users"
                         edit
                         editPath='/Users'
@@ -144,6 +176,13 @@ export default function Users() {
                     </div>
                 </div>
             </section>
+            <ConfirmModal
+                ModalBox={confirmModal}
+                modalData= {confirmModalData}
+                onCancel = {()=>{setConfirmModal(false);}}
+                onConfirm={OnModalConfirm}
+            >
+            </ConfirmModal>
         </main>
     );
 }

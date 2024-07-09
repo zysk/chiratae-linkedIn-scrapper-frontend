@@ -5,6 +5,15 @@ import { createlinkedInAccount } from '../../services/LinkedInAccounts.service';
 import { addUser, updateUser } from '../../services/users.service';
 import { toastError, toastSuccess } from '../../utils/toastUtils';
 import CustomButton from '../Utility/Button';
+import { ConfirmModal } from '../Utility/ConfirmationModal';
+
+const COMFIRMATION_DATA = {
+    update_user: {
+        type:"update_user",
+        heading: "Are you sure ?", 
+        title:"You can't revert changes"
+    },
+}
 
 export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
     const [name, setName] = useState("");
@@ -13,6 +22,25 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
     const [employeeId, setEmployeeId] = useState("");
     const [password, setPassword] = useState("");
     const [isActive, setIsActive] = useState(false);
+    const [confirmModal, setConfirmModal] = useState(false);
+    const[confirmModalData,setConfirmModalData] = useState({})
+
+    const openConfirmModal = (data,row_id)=>{
+        setConfirmModal(true);
+        setConfirmModalData({...data,row_id});
+    }
+
+    const OnModalConfirm = (data) => {
+        setConfirmModal(false);
+        switch (data.type){
+            case"update_user":{
+                handleUpdateUser(data.user_data)
+                break;
+            }
+            default :
+            console.log("Default case");
+        }
+    }
 
     const handleAddCategory = async () => {
         try {
@@ -56,12 +84,7 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
                 obj.password = Buffer.from(password).toString("base64")
             }
             if (selectedUser && selectedUser.name) {
-                let { data: res } = await updateUser(obj, selectedUser?._id);
-                if (res.success) {
-                    toastSuccess(res.message);
-                    setSelectedUser({})
-                    setChange(prev => prev + 1)
-                }
+                openConfirmModal({...COMFIRMATION_DATA.update_user, user_data: obj })
             }
             else {
                 let { data: res } = await addUser(obj);
@@ -69,8 +92,8 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
                     toastSuccess(res.message);
                     setChange(prev => prev + 1)
                 }
+                handleClearState()
             }
-            handleClearState()
         }
         catch (err) {
             toastError(err);
@@ -78,7 +101,16 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
         // dispatch(CATEGORYAdd(obj));
     };
 
-
+    const handleUpdateUser = async (obj) => {
+        let { data: res } = await updateUser(obj, selectedUser?._id);
+        if (res.success) {
+            toastSuccess(res.message);
+            setSelectedUser({})
+            setChange(prev => prev + 1)
+            handleClearState();
+        }
+    };
+    
     useEffect(() => {
         if (selectedUser && selectedUser.name) {
             setName(selectedUser?.name)
@@ -149,6 +181,13 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
                 </div>
 
             </form>
+            <ConfirmModal
+                ModalBox={confirmModal}
+                modalData= {confirmModalData}
+                onCancel = {()=>{setConfirmModal(false);}}
+                onConfirm={OnModalConfirm}
+            >
+            </ConfirmModal>
         </div>
     );
 }

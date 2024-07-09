@@ -39,6 +39,26 @@ import { debounce } from "lodash";
 import axios from "axios";
 import moment from "moment";
 
+import {ConfirmModal } from "../Utility/ConfirmationModal";
+
+const COMFIRMATION_DATA = {
+  assign_leads_to_selected_users: {
+    type:"assign_leads_to_selected_users",
+    heading: "Are you sure ?", 
+    title:"Leads will be assigned to the selected users"
+  },
+  assign_leads_to_user: { 
+    type:"assign_leads_to_user",
+    heading: "Are you sure ?", 
+    title:"Leads will be assigned to the selected user"
+  },
+  assign_leads_automatically:{
+    type:"assign_leads_automatically",
+    heading: "Are you sure ?", 
+    title:"Leads will be assigned automatically among the users"
+  }
+}
+
 const schoolOptions = [
   { label: "UnSelect", value: "" },
   {
@@ -67,6 +87,7 @@ const schoolOptions = [
 
 export default function AllLeads() {
   const companyoptions = [
+    { label: "UnSelect", value: "" },
     { label: "Stealth", value: "Stealth" },
     {
       label: "Stealth Startup",
@@ -121,6 +142,30 @@ export default function AllLeads() {
   const commentsContainer = useRef();
   const [leadsStatusArr, setLeadsStatusArr] = useState([]);
   const [updateDate, setUpdateDate] = useState(new Date());
+  const [confirmModal, setConfirmModal] = useState(false);
+  const[confirmModalData,setConfirmModalData] = useState({})
+
+  const openConfirmModal = (data)=>{
+    setConfirmModalData(data)
+    setConfirmModal(true);
+  }
+
+  const OnModalConfirm = (data) => {
+    setConfirmModal(false);
+    switch (data.type){
+      case "assign_leads_to_selected_users" :{
+        handleAssignLeadToSelectedUsers();
+        break;
+      }
+      case"assign_leads_automatically":{
+        handleAllotAllLeads();
+        break;
+      }
+      default :
+        console.log("Default case");
+    }
+  }
+
   const handleGetLeads = async (
     skipValue,
     limitValue,
@@ -212,6 +257,7 @@ export default function AllLeads() {
           selectedCompany ? selectedCompany : null
         );
       }
+      setSelectUsersModal(false);
     } catch (err) {
       toastError(err);
     }
@@ -285,12 +331,12 @@ export default function AllLeads() {
     {
       name: "Last Updated On",
       selector: (row) => `${new Date(row?.createdAt).toDateString()}`,
-      width: "12%",
+      width: "14%",
     },
     {
       name: "Rating",
       selector: (row) => `${row.rating}`,
-      width: "12%",
+      width: "10%",
     },
     {
       name: "Status",
@@ -390,12 +436,12 @@ export default function AllLeads() {
       {
         name: "Last Updated On",
         selector: (row) => `${new Date(row?.createdAt).toDateString()}`,
-        width: "12%",
+        width: "14%",
       },
       {
         name: "Rating",
         selector: (row) => `${row.rating}`,
-        width: "12%",
+        width: "10%",
       },
       {
         name: "Status",
@@ -844,7 +890,8 @@ export default function AllLeads() {
                               btntype="button"
                               ClickEvent={() => {
                                 setFilterSelected("allot");
-                                handleAllotAllLeads();
+                                openConfirmModal(COMFIRMATION_DATA['assign_leads_automatically'])
+                                // handleAllotAllLeads();
                               }}
                               noIcon
                               changeClass={
@@ -1109,6 +1156,14 @@ export default function AllLeads() {
             </div>
           </section>
 
+          <ConfirmModal
+            ModalBox={confirmModal}
+            modalData= {confirmModalData}
+            onCancel = {()=>{setConfirmModal(false);}}
+            onConfirm={OnModalConfirm}
+          >
+          </ConfirmModal>
+
           <Modal
             open={ModalBox}
             onClose={() => setModalBox(false)}
@@ -1214,10 +1269,13 @@ export default function AllLeads() {
                     btnName="Assign Leads to selected users"
                     btntype="button"
                     changeClass="mt-4 btn btn-1"
+                    disabled={selectedUsers.length === 0}
                     ClickEvent={(e) => {
                       e.preventDefault();
-                      handleAssignLeadToSelectedUsers();
-                      setSelectUsersModal(false);
+                      setConfirmModal(true)
+                      openConfirmModal(COMFIRMATION_DATA['assign_leads_to_selected_users'])
+                      // handleAssignLeadToSelectedUsers();
+                      // setSelectUsersModal(false);
                     }}
                   />
                 </div>

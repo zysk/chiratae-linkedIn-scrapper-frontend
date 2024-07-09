@@ -7,7 +7,8 @@ function SideBar() {
   let location = useLocation();
   let role = useSelector((state) => state.auth.role);
   const sideBarOpen = useSelector((state) => state.auth.sideBarOpen);
-
+  const [activeTab, setActiveTab] = useState("")
+  const [activeTabChild, setActiveChildTab] = useState("")
   const [sidebar_item, setsidebar_item] = useState([
     // {
     //   isrotated: true,
@@ -274,34 +275,43 @@ function SideBar() {
     // },
   ]);
 
+  useEffect(()=>{
+    const path = location.pathname
+    try{
+      sidebar_item.map((element, index) => {
+        if(element.children.length > 0){
+          element.children.map((child, childIndex) => {
+            if(child.path === path){
+              setActiveChildTab(child.name)
+              setActiveTab(element.name)
+            }
+          })
+        }
+        if(element.path === path){
+          setActiveTab(element.name)
+        }
+      });
+    } catch (e){
+      console.error(e)
+    }
+  },[])
+  
   const isRotating = (i) => {
+    if (sidebar_item[i].children.length === 0) setActiveTab(sidebar_item[i].name) 
+    else{
     let temp_array = sidebar_item.map((el, index) => {
       if (index === i) {
         el.isrotated = !el.isrotated;
-        el.active = true;
-      } else {
-        el.active = false;
-      }
+      } else el.isrotated = false
       return el;
     });
-    setsidebar_item([...temp_array]);
+      setsidebar_item([...temp_array]);
+    }
   };
 
-  const childActive = (i) => {
-    let temp_array = sidebar_item.map((el, index) => {
-      if (el.children.length > 0) {
-        el.children.map((item, childIndex) => {
-          if (childIndex === i) {
-            item.active = true;
-          } else {
-            item.active = false;
-          }
-          return item;
-        });
-      }
-      return el;
-    });
-    setsidebar_item([...temp_array]);
+  const childActive = (i, parentIndex) => {
+    setActiveTab(sidebar_item[parentIndex].name)
+    setActiveChildTab(sidebar_item[parentIndex]['children'][i].name)
   };
 
 
@@ -330,7 +340,11 @@ function SideBar() {
               <li key={`sidebar_item_${i}`}>
                 <Link
                   to={item.path}
-                  className={item.active || location.pathname === item.path ? "active" : ""}
+                  className={
+                    item.active || activeTab === item['name']
+                      ? "active"
+                        : ""
+                   }
                   onClick={() => isRotating(i)}
                 >
                   <i className={item.icon}></i>
@@ -350,9 +364,14 @@ function SideBar() {
                 <li key={`sidebar_item_${i}`}>
                   <Link
                     to={`#sidebar_item_children_${i}`}
+                    // className={
+                    //   item.active || location.pathname === item.path ? "active collapsed" : "collapsed"
+                    // }
                     className={
-                      item.active || location.pathname === item.path ? "active collapsed" : "collapsed"
-                    }
+                      activeTab === item['name']
+                        ? "active collapsed"
+                          : "collapsed"
+                     }
                     data-bs-toggle="collapse"
                     aria-expanded={`${item.isrotated}`}
                     aria-controls={`sidebar_item_children_${i}`}
@@ -385,12 +404,17 @@ function SideBar() {
                           <li key={`${child.name}_${index}`}>
                             <Link
                               to={child.path}
+                              // className={
+                              //   location.pathname === child.path
+                              //     ? "active"
+                              //     : ""
+                              // }
                               className={
-                                location.pathname === child.path
+                                activeTabChild === child.name && activeTab === item['name']
                                   ? "active"
-                                  : ""
-                              }
-                              onClick={() => childActive(index)}
+                                    : ""
+                               }
+                              onClick={() => childActive(index, i)}
                             >
                               {sideBarOpen ? <span>{child.name}</span> : <i className={item.icon}></i>}
                             </Link>
@@ -403,11 +427,16 @@ function SideBar() {
                             <Link
                               to={child.path}
                               className={
-                                location.pathname === child.path
+                                activeTabChild === child.name && activeTab === item['name']
                                   ? "active"
-                                  : ""
-                              }
-                              onClick={() => childActive(index)}
+                                    : ""
+                               }
+                              // className={
+                              //   location.pathname === child.path
+                              //     ? "active"
+                              //     : ""
+                              // }
+                              onClick={() => childActive(index, i)}
                             >
                               <i className={child?.icon}></i>
                             </Link>
