@@ -42,7 +42,7 @@ export default function Users() {
             break;
             }
             default :
-            console.log("Default case");
+                break;
         }
     }
     const category_columns = [

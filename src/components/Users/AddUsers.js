@@ -38,7 +38,7 @@ export default function AddUsers({ selectedUser, setSelectedUser, setChange }) {
                 break;
             }
             default :
-            console.log("Default case");
+                break;
         }
     }
 

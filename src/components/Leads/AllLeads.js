@@ -162,7 +162,7 @@ export default function AllLeads() {
         break;
       }
       default :
-        console.log("Default case");
+        break;
     }
   }
 
