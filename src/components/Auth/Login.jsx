@@ -8,19 +8,10 @@ import { loginUser } from "../../redux/actions/auth/auth.actions";
 
 function Login({ Unauth }) {
   const [password, setpassword] = useState("");
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [email, setEmail] = useState("");
 
-  const [passwordIcon, setpasswordIcon] = useState("ion-eye");
   const dispatch = useDispatch();
-  const passwordClick = () => {
-    if (password === "password") {
-      setpassword("text");
-      setpasswordIcon("ion-eye-disabled");
-    } else {
-      setpassword("password");
-      setpasswordIcon("ion-eye");
-    }
-  };
   const handleSubmit = () => {
     let obj = {
       email,
@@ -53,8 +44,8 @@ function Login({ Unauth }) {
               <div className="col-12 mb-3">
                 <label>Password</label>
                 <div className="form-input password-input">
-                  <input className="form-control" name="email" value={password} type={password} onChange={(event) => setpassword(event.target.value)} />
-                  <i className={passwordIcon} onClick={passwordClick}></i>
+                  <input className="form-control" name="email" value={password} type={isPasswordHidden ? "password":"text"} onChange={(event) => setpassword(event.target.value)} />
+                  <i className={isPasswordHidden ? "ion-eye" :"ion-eye-disabled"} onClick={()=>setIsPasswordHidden(!isPasswordHidden)}></i>
                 </div>
               </div>
               <div className={Unauth ? "col-12 mt-2 text-center" : "col-12 mt-2"}>

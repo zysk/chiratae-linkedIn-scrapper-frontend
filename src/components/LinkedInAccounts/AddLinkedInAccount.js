@@ -5,7 +5,7 @@ import { createlinkedInAccount } from '../../services/LinkedInAccounts.service';
 import { toastError, toastSuccess } from '../../utils/toastUtils';
 import CustomButton from '../Utility/Button';
 
-export default function AddLinkedInAccount({ makeChange }) {
+export default function AddLinkedInAccount({ makeChange, OnAccountAdded }) {
 
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -30,6 +30,7 @@ export default function AddLinkedInAccount({ makeChange }) {
             let { data: res } = await createlinkedInAccount(obj);
             if (res.success) {
                 toastSuccess(res.message);
+                OnAccountAdded()
             }
         }
         catch (err) {

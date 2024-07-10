@@ -228,6 +228,12 @@ body {
   background-color: #D68594;
   color: #fff;
 }
+
+.btn-1:focus {
+  background-color: #D68594;
+  color: #fff;
+}
+
 .btn-1:hover {
   transition: all 0.5s;
   background-color: #D68594;

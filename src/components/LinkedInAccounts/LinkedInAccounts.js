@@ -72,7 +72,10 @@ export default function LinkedInAccounts() {
   useEffect(() => {
     handleGet();
   }, []);
-
+  
+  const handleApiResponse =() =>{
+    handleGet()
+  }
   // ==============================================================================================================
 
   const customStyles = {
@@ -108,7 +111,7 @@ export default function LinkedInAccounts() {
                     <h5>Add LinkedIn account</h5>
                 </div>
               </div>
-                <AddLinkedInAccount />
+                <AddLinkedInAccount OnAccountAdded={handleApiResponse} />
               </DashboardBox>
             </div>
             <div className="col-12 col-md-12">

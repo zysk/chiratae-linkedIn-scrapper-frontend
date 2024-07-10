@@ -49,7 +49,7 @@ export default function PreviousSentMails() {
     {
       name: "Date",
       selector: (row) => DisplayDate(row.createdAt, "dd/mm/yyyy"),
-      width: "8%"
+      width: "15%"
     },
   ];
 
