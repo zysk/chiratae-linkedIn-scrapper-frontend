@@ -1,7 +1,0 @@
-export const leadStatusObj = {
-    CREATED: "CREATED",
-    WORKINPROGRESS: "WORKINPROGRESS",
-    CLOSED: "CLOSED",
-    DORMANT: "DORMANT",
-    CONTACTAGAIN: "CONTACTAGAIN",
-};
