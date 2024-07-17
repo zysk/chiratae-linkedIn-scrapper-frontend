@@ -4,13 +4,13 @@ import React from 'react'
 
 const Requests = () => {
   return (
-    // <FullLayout>
+    <FullLayout>
       <ContainerWrapper>
         <div>
           <h1>Requests Page</h1>
         </div>
       </ContainerWrapper>
-    // </FullLayout>
+    </FullLayout>
   )
 }
 
