@@ -1,9 +1,8 @@
 "use client";
 
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Input } from "@/components/ui/input";
-// import { ArrowLeft } from "lucide-react";
-// import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ArrowLeft } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 // import { FiBell, FiSearch } from "react-icons/fi";
@@ -11,6 +10,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 export const Header = () => {
   // const { data: session } = useSession();
+  const session = {}
   const router = useRouter();
   const pathName = usePathname();
 
@@ -38,16 +38,10 @@ export const Header = () => {
         )} */}
       {/* </div> */}
       <div className="flex items-center gap-x-10">
-        
-        {/* <FiBell size={30} /> */}
-        {/* <span className="flex items-center gap-x-2">
-          <Image src="/coin.svg" width={38.75} height={38.75} alt="coin" />
-          <p className="font-medium text-xl">112</p>
-        </span> */}
-        {/* <Avatar className="cursor-pointer">
-          <AvatarImage src={session?.user?.image ?? ""} alt="@shadcn" />
-          <AvatarFallback>{session?.user?.name?.charAt(0) ?? ""}</AvatarFallback>
-        </Avatar> */}
+        <Avatar className="cursor-pointer">
+          <AvatarImage src={session?.user?.image ?? "I"} alt="@shadcn" />
+          <AvatarFallback>{session?.user?.name?.charAt(0) ?? "U"}</AvatarFallback>
+        </Avatar>
       </div>
     </div>
   );
