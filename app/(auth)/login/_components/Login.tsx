@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import LoginButton from "./LoginButton";
 import { BsMicrosoft } from "react-icons/bs";
-
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../../redux/actions/auth/auth.actions";
 const AuthLogin = () => {
   const [password, setpassword] = useState("");
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [email, setEmail] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
   const handleSubmit = (e:any) => {
     e.preventDefault();
     let obj = {
@@ -15,7 +16,7 @@ const AuthLogin = () => {
       password: Buffer.from(password).toString("base64"),
     };
     console.log(obj);
-    // dispatch(loginUser(obj));
+    dispatch(loginUser(obj));
   };
   return (
     <div className="max-w-[360px] mx-auto">

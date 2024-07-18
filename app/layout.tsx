@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import FullLayout from "@/components/layouts/FullLayout";
+import { StoreProvider } from "@/redux/storeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,12 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-        <body className={inter.className}>
-          {/* <FullLayout> */}
-            {children}
-          {/* </FullLayout> */}
-          </body>
-    </html>
+    <StoreProvider>
+      <html lang="en">
+            {/* <FullLayout> */}
+            <body className={inter.className}>
+              {children}
+            </body>
+            {/* </FullLayout> */}
+      </html>
+    </StoreProvider>
   );
 }
