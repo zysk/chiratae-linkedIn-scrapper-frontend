@@ -7,9 +7,6 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FiLayers } from "react-icons/fi";
-import { FaCircleChevronDown } from "react-icons/fa6";
-import { FaCircleChevronUp } from "react-icons/fa6";
 import { FaChevronDown } from "react-icons/fa";
 import { FaChevronUp } from "react-icons/fa";
 
@@ -77,7 +74,7 @@ export const Sidebar : React.FC = () => {
                                   className={`flex items-center py-2.5 px-4 space-x-3 rounded-md hover:bg-gray-500/10 transition-colors duration-300 
                                   ${isActive && "bg-[#e2e8f0]"}`}
                                 >
-                                  <link.icon size={24} />
+                                  <child.icon size={24} />
                                   {/* {getIcon(link.icon, 24)} */}
     
                                   <span>{child.label}</span>

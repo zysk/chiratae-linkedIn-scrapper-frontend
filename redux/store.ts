@@ -14,9 +14,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, RootReducer);
 
 export const store = configureStore({
-  reducer: {
-    auth: persistedReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false,
   }).concat(thunk),

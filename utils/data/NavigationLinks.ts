@@ -4,7 +4,18 @@
   import {
     RiHome6Line,
   } from "react-icons/ri";
-
+  import { MdOutlineCampaign } from "react-icons/md";
+  import { IoMdAdd } from "react-icons/io";
+  import { MdOutlineContentPaste } from "react-icons/md";
+  import { LuMailPlus } from "react-icons/lu";
+  import { RiMailCheckLine } from "react-icons/ri";
+  import { PiUsersThree } from "react-icons/pi";
+  import { PiUsers } from "react-icons/pi";
+  import { MdOutlineSettings } from "react-icons/md";
+  import { FaLinkedinIn } from "react-icons/fa6";
+  import { RiLinkedinLine } from "react-icons/ri";
+  import { MdOutlineMailOutline } from "react-icons/md";
+  import { MdInfoOutline } from "react-icons/md";
 export interface NavigationLink {
   href: string;
   icon: IconType;
@@ -27,43 +38,43 @@ export const navigationLinks: NavigationLink[] = [
   },
   {
     href: "/All-Leads",
-    icon: FiLayers,
+    icon: PiUsersThree,
     label: "All Leads",
     disabled: false,
   },
   {
     href: "/Users",
-    icon: FiLayers,
+    icon: PiUsers,
     label: "Sub Users",
     disabled: false,
   },
   {
     href: "/SendCustomMail",
-    icon: FiLayers,
+    icon: LuMailPlus,
     label: "Send Custom Mail",
     disabled: false,
   },
   {
     href: "/PreviousSentMails",
-    icon: FiLayers,
+    icon: RiMailCheckLine,
     label: "Previously Sent Mails",
     disabled: false,
   },
   {
-    href: "/tests",
-    icon: HiOutlineChartSquareBar,
+    href: "/Campaign",
+    icon: MdOutlineCampaign,
     label: "Campaign",
     disabled:false,
     collapsed: true,
     children:[{
           href: "/Campaign",
-          icon: FiLayers,
+          icon: IoMdAdd,
           label: "New Campaign",
           disabled: false,
         },
         {
           href: "/Past-Campaign",
-          icon: FiLayers,
+          icon: MdOutlineContentPaste,
           label: "Past Campaign",
           disabled: false,
         }
@@ -71,25 +82,25 @@ export const navigationLinks: NavigationLink[] = [
   },
   {
         href: "/setting",
-        icon: HiOutlineChartSquareBar,
+        icon: MdOutlineSettings,
         label: "Setting",
         disabled: false,
         collapsed:true,
         children:[{
               href: "/LinkedInAccounts",
-              icon: FiLayers,
+              icon: RiLinkedinLine,
               label: "LinkedIn Login",
               disabled: false,
             },
             {
               href: "/EmailSettings",
-              icon: FiLayers,
+              icon: MdOutlineMailOutline,
               label: "Email Setting",
               disabled: false,
             },
             {
               href: "/Lead-Status",
-              icon: FiLayers,
+              icon: MdInfoOutline,
               label: "Lead Status",
               disabled: false,
             }

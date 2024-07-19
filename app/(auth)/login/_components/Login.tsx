@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import LoginButton from "./LoginButton";
-import { BsMicrosoft } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../../../redux/actions/auth/auth.actions";
 const AuthLogin = () => {

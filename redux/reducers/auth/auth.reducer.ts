@@ -7,7 +7,6 @@ interface DataState {
     token: any |null;
     loading: boolean;
     sideBarOpen: boolean;
-    // data: any; // Replace with appropriate type
     error: string | null;
   }
 

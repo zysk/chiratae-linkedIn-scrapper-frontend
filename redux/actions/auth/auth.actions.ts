@@ -1,8 +1,10 @@
 // import { login } from "../../../services/users.service";
-// import jwtDecode from "jwt-decode";
+"use client"
+import {jwtDecode} from "jwt-decode";
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../../store';
 import { Action } from 'redux';
+import { login } from '@/utils/services/users.service';
 
 export const AUTH = "AUTH";
 export const AUTH_SUCCESS = "AUTH_SUCCESS";
@@ -19,13 +21,13 @@ interface AuthRequestAction {
   }
   
 interface AuthSuccessAction {
-type: typeof AUTH_SUCCESS;
-payload: any; // Replace with appropriate type
+    type: typeof AUTH_SUCCESS;
+    payload: any; // Replace with appropriate type
 }
   
 interface AuthFailureAction {
-type: typeof AUTH_FAIL;
-payload: string;
+    type: typeof AUTH_FAIL;
+    payload: string;
 }
 
 interface LogoutAction {
@@ -48,28 +50,26 @@ export type DataActionTypes =
 export const loginUser = (formData:AuthForm):ThunkAction<void, RootState, unknown, Action<string>> => async (dispatch) => {
   try {
     dispatch({ type: AUTH });
-    // let { data: response } = await login(formData);
-    let response = true;
+    let { data: response } = await login(formData);
     if (response) {
-      console.log(response, "action response");
-    //   let decodedToken = await jwtDecode(response.token);
-    //   localStorage.setItem("token", response.token);
-    //   if (`${decodedToken.role}`.toLowerCase() == "admin") {
-    //     window.location.href = "/"
-    //   }
-    //   else {
-    //     window.location.href = "/My-Leads"
-    //   }
-      dispatch({
-        type: AUTH_SUCCESS,
-        payload: {
-        //   ...response.data,
-        //   token: response.token,
-        //   role: decodedToken.role,
-        //   user: decodedToken.user,
-        },
-      });
-    }
+      let decodedToken: any = await jwtDecode(response.token);
+      localStorage.setItem("token", response.token);
+      if (`${decodedToken.role}`.toLowerCase() == "admin") {
+        window.location.href = "/All-Leads"
+        dispatch({
+              type: AUTH_SUCCESS,
+              payload: {
+                ...response.data,
+                token: response.token,
+                role: decodedToken.role,
+                user: decodedToken.user,
+              },
+            });
+      }
+      else {
+        window.location.href = "/My-Leads"
+      }
+      }
   } catch (err) {
     console.error(err);
     dispatch({ type: AUTH_FAIL, payload: err });
