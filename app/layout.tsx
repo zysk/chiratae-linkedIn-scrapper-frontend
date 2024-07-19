@@ -17,14 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <StoreProvider>
-      <html lang="en">
+    <html lang="en">
             {/* <FullLayout> */}
             <body className={inter.className}>
-              {children}
+              <StoreProvider>
+                  {children}
+              </StoreProvider>
             </body>
             {/* </FullLayout> */}
       </html>
-    </StoreProvider>
   );
 }
