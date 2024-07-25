@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import FullLayout from "@/components/layouts/FullLayout";
 import { StoreProvider } from "@/redux/storeProvider";
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
               <StoreProvider>
                   {children}
               </StoreProvider>
+              <Toaster richColors  duration={5000}/>
             </body>
             {/* </FullLayout> */}
       </html>

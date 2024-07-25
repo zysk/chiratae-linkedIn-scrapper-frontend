@@ -61,7 +61,7 @@ export const navigationLinks: NavigationLink[] = [
     disabled: false,
   },
   {
-    href: "/Campaign",
+    href: "/",
     icon: MdOutlineCampaign,
     label: "Campaign",
     disabled:false,

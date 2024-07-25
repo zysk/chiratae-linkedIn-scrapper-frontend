@@ -17,7 +17,7 @@ export const Header = () => {
   // const showBackButton = /^\/tests\/.+/.test(pathName);
 
   return (
-    <div className="flex px-20 py-8 justify-end bg-[#ede9e9]">
+    <div className="flex px-20 py-8 justify-end bg-white">
       {/* <div className="w-full"> */}
         {/* {!showBackButton && (
           <Input

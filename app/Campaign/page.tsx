@@ -1,17 +1,22 @@
+"use client";
 import FullLayout from '@/components/layouts/FullLayout'
 import ContainerWrapper from '@/components/wrappers/ContainerWrapper'
-import React from 'react'
+import React, { useState } from 'react';
+import {AddCompaign} from './AddCampaign'
+import { LinkedInLogin } from './LinkedInLogin';
 
-const Requests = () => {
+const Campaign = () => {
+
+  // const [isLinkedinActive,setIsLinkedinActive] = useState(true);
+  // const [linkedinCred,setLinkedinCred]  = useState({});
+
   return (
     <FullLayout>
       <ContainerWrapper>
-        <div>
-          <h1>Requests Page</h1>
-        </div>
+          <AddCompaign/> 
       </ContainerWrapper>
     </FullLayout>
   )
 }
 
-export default Requests
+export default Campaign
