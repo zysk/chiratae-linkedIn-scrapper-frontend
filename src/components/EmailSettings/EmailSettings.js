@@ -13,22 +13,57 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 // import { BiDotsVerticalRounded } from 'react-icons/bi';
+import { Controller, useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup";
+
+const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const hostnamePattern = /^(?=.{1,253}$)(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z0-9-]{1,63})*$/;
+
 export default function EmailSettings() {
 
+    const schema = yup.object().shape({
+		mailHost: yup.string()
+						.required("Host Name is Required")
+                        .matches(hostnamePattern, 'Invalid hostname format'),
+		mailPort : yup.string()
+                        .required("Port Number is Required")
+                        .matches(/^[0-9]+$/, 'Port Number must be only digits')
+						.min(2, "Port Number should be at least 2 digits")
+						.max(3, "Port Number should not exceed 3 digits"),
+		mailUserName: yup.string()
+                        .required('Username is required')
+                        .matches(emailPattern, 'Invalid email format'),
+        mailUserPassword: yup.string()
+                        .required("Password is Required"),
+		mailService: yup.string()
+						.required("Service is Required")
+						.max(50, "Service should not exceed 50 characters"),
+		mailEncryption: yup.string()
+						.required("Encryption is Required")
+	});
 
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
+		resolver: yupResolver(schema),
+		defaultValues:{
+			mailHost: "",
+			mailPort: "",
+			mailUserName: "",
+			mailUserPassword: "",
+			mailService: "",
+            mailEncryption:""
+		}
+	  });
 
+      const onSubmitHandler = (data) => {
+        handleAdd(data);
+	};
     // ==============================================================================================================
     const [emailSettingsObj, setEmailSettingsObj] = useState([]);
 
 
     const [mailFromAddress, setMailFromAddress] = useState("");
     const [mailFromName, setMailFromName] = useState("");
-    const [mailHost, setMailHost] = useState("");
-    const [mailPort, setMailPort] = useState("");
-    const [mailUserName, setMailUserName] = useState("");
-    const [mailUserPassword, setMailUserPassword] = useState("");
-    const [mailEncryption, setMailEncryption] = useState("");
-    const [mailService, setMailService] = useState("");
 
     const [companyOptions, setCompanyOptions] = useState("");
 
@@ -41,12 +76,14 @@ export default function EmailSettings() {
                 setEmailSettingsObj(res.data)
                 setMailFromAddress(res.data.mailFromAddress)
                 setMailFromName(res.data.mailFromName)
-                setMailHost(res.data.mailHost)
-                setMailPort(res.data.mailPort)
-                setMailUserName(res.data.mailUserName)
-                setMailUserPassword(res.data.mailUserPassword)
-                setMailEncryption(res.data.mailEncryption)
-                setMailService(res.data.mailService)
+                reset({
+                    mailHost: res.data.mailHost,
+                    mailPort: res.data.mailPort,
+                    mailUserName: res.data.mailUserName,
+                    mailUserPassword: res.data.mailUserPassword,
+                    mailService: res.data.mailService,
+                    mailEncryption: res.data.mailEncryption
+                })
             }
         }
         catch (err) {
@@ -62,47 +99,17 @@ export default function EmailSettings() {
 
     const [value, setValue] = useState("");
 
-    const handleAdd = async () => {
+    const handleAdd = async (data) => {
         try {
-
-            // if (mailFromAddress == "") {
-            //     toastError("Mail From Address Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailFromName == "") {
-            //     toastError("Mail From Name Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailHost == "") {
-            //     toastError("Mail Host Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailPort == "") {
-            //     toastError("Mail Port Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailUserName == "") {
-            //     toastError("Mail User Name Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailUserPassword == "") {
-            //     toastError("Mail User Password Field cannot be empty!");
-            //     return;
-            // }
-            // if (mailEncryption == "") {
-            //     toastError("Mail Encryption Field cannot be empty!");
-            //     return;
-            // }
-
             let obj = {
                 mailFromAddress,
                 mailFromName,
-                mailHost,
-                mailPort,
-                mailUserName,
-                mailUserPassword: Buffer.from(mailUserPassword).toString("base64"),
-                mailEncryption,
-                mailService
+                mailHost: data.mailHost,
+                mailPort: data.mailPort,
+                mailUserName: data.mailUserName,
+                mailUserPassword: Buffer.from(data.mailUserPassword).toString("base64"),
+                mailEncryption: data.mailEncryption,
+                mailService: data.mailService
             };
             let { data: res } = await addEmailSettings(obj);
             if (res.success) {
@@ -154,7 +161,7 @@ export default function EmailSettings() {
                                     {/* <div className='breadcumarea'>
                                         <h4>Add LinkedIn Account</h4>
                                     </div> */}
-                                    <form action="#" className="form row">
+                                    <form className="form row" onSubmit={handleSubmit(onSubmitHandler)}>
                                         {/* <div className={"col-6"}>
 
                                             <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label="Mail From Address" value={mailFromAddress} onChange={(event) => setMailFromAddress(event.target.value)} type="text" className="form-control" />
@@ -164,45 +171,129 @@ export default function EmailSettings() {
                                             <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label=" Mail From Name" value={mailFromName} onChange={(event) => setMailFromName(event.target.value)} type="text" className="form-control" />
                                         </div> */}
                                         <div className={"col-6"}>
-
-                                            <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label="Mail Host" value={mailHost} onChange={(event) => setMailHost(event.target.value)} type="text" className="form-control" />
+                                            <Controller
+                                                name="mailHost"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField 
+                                                        sx={{ borderRadius: 5 }} 
+                                                        id="outlined-basic" 
+                                                        label="Mail Host" 
+                                                        value={field.value} 
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        type="text" 
+                                                        className="form-control"
+                                                    />
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailHost && <div className="text-danger mt-2">{errors.mailHost.message}</div>}
                                         </div>
                                         <div className={"col-6"}>
-
-                                            <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label="Mail Port" value={mailPort} onChange={(event) => setMailPort(event.target.value)} type="text" className="form-control" />
+                                            <Controller
+                                                name="mailPort"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField 
+                                                        sx={{ borderRadius: 5 }} 
+                                                        id="outlined-basic" 
+                                                        label="Mail Port" 
+                                                        value={field.value} 
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        type="text" 
+                                                        className="form-control"
+                                                    />
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailPort && <div className="text-danger mt-2">{errors.mailPort.message}</div>}
                                         </div>
                                         <div className={"col-6"}>
-
-                                            <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label=" Mail User Name" value={mailUserName} onChange={(event) => setMailUserName(event.target.value)} type="text" className="form-control" />
+                                            <Controller
+                                                name="mailUserName"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField 
+                                                        sx={{ borderRadius: 5 }} 
+                                                        id="outlined-basic" 
+                                                        label="Mail User Name" 
+                                                        value={field.value} 
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        type="text" 
+                                                        className="form-control"
+                                                    />
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailUserName && <div className="text-danger mt-2">{errors.mailUserName.message}</div>}
                                         </div>
                                         <div className={"col-6"}>
-
-                                            <TextField sx={{ borderRadius: 5 }} id="outlined-basic" type="password" label=" Mail Password" value={mailUserPassword} onChange={(event) => setMailUserPassword(event.target.value)} className="form-control" />
+                                            <Controller
+                                                name="mailUserPassword"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField 
+                                                        sx={{ borderRadius: 5 }} 
+                                                        id="outlined-basic" 
+                                                        label="Mail Password" 
+                                                        value={field.value} 
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        type="password" 
+                                                        className="form-control"
+                                                    />
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailUserPassword && <div className="text-danger mt-2">{errors.mailUserPassword.message}</div>}
                                         </div>
                                         <div className={"col-6"}>
-
-                                            <TextField sx={{ borderRadius: 5 }} id="outlined-basic" label=" Mail Service" value={mailService} onChange={(event) => setMailService(event.target.value)} type="text" className="form-control" />
+                                            <Controller
+                                                name="mailService"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <TextField 
+                                                        sx={{ borderRadius: 5 }} 
+                                                        id="outlined-basic" 
+                                                        label="Mail Service" 
+                                                        value={field.value} 
+                                                        onChange={(e) => field.onChange(e.target.value)}
+                                                        type="text" 
+                                                        className="form-control"
+                                                    />
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailService && <div className="text-danger mt-2">{errors.mailService.message}</div>}
                                         </div>
                                         <div className={"col-6"}>
                                             {/* <label className="blue-1 fs-12">
                                                 Mail Encryption <span className="red">*</span>
                                             </label> */}
-                                            <Box sx={{ minWidth: 120 }}>
-                                                <FormControl fullWidth>
-                                                    <InputLabel id="demo-simple-select-label">Mail Encryption</InputLabel>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        value={mailEncryption}
-                                                        label="Mail Encryption"
-                                                        onChange={e => setMailEncryption(e.target.value)}
-                                                    >
-                                                        <MenuItem value='SSL'>SSL</MenuItem>
-                                                        <MenuItem value='TLS'>TLS</MenuItem>
+                                            <Controller
+                                                name="mailEncryption"
+                                                control={control}
+                                                render={({ field }) => (
+                                                    <Box sx={{ minWidth: 120 }}>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel id="demo-simple-select-label">Mail Encryption</InputLabel>
+                                                            <Select
+                                                                labelId="demo-simple-select-label"
+                                                                id="demo-simple-select"
+                                                                value={field.value} 
+                                                                label="Mail Encryption"
+                                                                onChange={(e) => field.onChange(e.target.value)}
 
-                                                    </Select>
-                                                </FormControl>
-                                            </Box>
+                                                            >
+                                                                <MenuItem value='SSL'>SSL</MenuItem>
+                                                                <MenuItem value='TLS'>TLS</MenuItem>
+
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Box>
+                                                    )
+                                                }
+                                            />
+                                            {errors.mailEncryption && <div className="text-danger mt-2">{errors.mailEncryption.message}</div>}
 
                                             {/* <ReactSelect value={{ label: mailEncryption, value: mailEncryption }} onChange={(e) => setMailEncryption(e.value)} options={[{ label: "SSL", value: "SSL" }, { label: "TLS", value: "TLS" }]} /> */}
 
@@ -211,7 +302,7 @@ export default function EmailSettings() {
 
 
                                         <div className="col-12 text-end mt-2">
-                                            <CustomButton btntype="button" ClickEvent={handleAdd} iconName="fa-solid fa-check" changeClass="me-4 btn btn-1 btn-outline" btnName="Save" isBtn small={true} />
+                                            <CustomButton btntype="submit" iconName="fa-solid fa-check" changeClass="me-4 btn btn-1 btn-outline" btnName="Save" isBtn small={true} />
                                         </div>
                                     </form>
                                 </div>
