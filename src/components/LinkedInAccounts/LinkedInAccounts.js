@@ -23,7 +23,7 @@ export default function LinkedInAccounts() {
   // ==============================================================================================================
   const [categoryArr, setCategoryArr] = useState([]);
   const [confirmModal, setConfirmModal] = useState(false);
-    const[confirmModalData,setConfirmModalData] = useState({})
+  const[confirmModalData,setConfirmModalData] = useState({})
 
     const openConfirmModal = (data)=>{
       console.log({data})
