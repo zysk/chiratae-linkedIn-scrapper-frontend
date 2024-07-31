@@ -25,13 +25,11 @@ export default function LeadStatus() {
     const[confirmModalData,setConfirmModalData] = useState({})
 
     const openConfirmModal = (data)=>{
-        console.log({data})
         setConfirmModal(true);
         setConfirmModalData({...data});
     }
 
     const OnModalConfirm = (data) => {
-        console.log(data);
         setConfirmModal(false);
         switch (data.type){
             case "delete":{
