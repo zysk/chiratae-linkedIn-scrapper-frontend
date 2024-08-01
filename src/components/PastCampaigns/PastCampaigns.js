@@ -76,8 +76,8 @@ export default function PastCampaigns() {
                                                 return (
                                                     <tr key={index}>
                                                         <th scope="row">{index + 1}</th>
-                                                        <td>{el?.name ? el?.name : "N.A."}</td>
-                                                        <td>{el?.searchQuery ? el?.searchQuery : "N.A."}</td>
+                                                        <td className='text-break'>{el?.name ? el?.name : "N.A."}</td>
+                                                        <td className='text-break'>{el?.searchQuery ? el?.searchQuery : "N.A."}</td>
                                                         <td>{el?.percent && (el?.percent).toFixed(2)} ({el?.completedLeads} out of {el?.totalLeads})</td>
                                                         {/* <td>{el?.company ? el?.company : "N.A."}</td> */}
                                                         {/* <td>{el?.school ? el?.school.split(",").map((el, index) => {
