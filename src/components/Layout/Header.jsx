@@ -75,9 +75,9 @@ function Header() {
                 {/* <li>
                   <CustomButton isLink btnName="Company Info" path="/Company-Information" iconName="ion-ios-person" noClass />
                 </li> */}
-                <li>
+                {/* <li>
                   <CustomButton isLink btnName="Settings" path="" iconName="ion-ios-gear" noClass />
-                </li>
+                </li> */}
                 <li>
                   <CustomButton ClickEvent={handleLogout} isLink btnName="Log out" path="/" iconName="ion-share" noClass />
                 </li>
