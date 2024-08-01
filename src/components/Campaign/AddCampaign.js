@@ -630,7 +630,7 @@ export default function AddCampaign() {
                             render={({ field }) => (
                                 <Select
                                   value={
-                                      companyArr.find((el) => el.value === field.value)
+                                      companyArr.find((el) => el.value === field.value)  || null
                                   }
                                   // value={field.value}
                                   onChange={(e) => field.onChange(e.value)}
@@ -678,10 +678,11 @@ export default function AddCampaign() {
                               <>
                                 <Select
                                     value={
-                                      companyArr.find((el) => el.value === field.value)
+                                      companyArr.find((el) => el.value === field.value) || null
                                   }
-                                    onChange={(e) => field.onChange(e.value)}
+                                    onChange={(e) => e ? field.onChange(e.value): field.onChange("")}
                                     options={companyArr}
+                                    isClearable
                                   />
                               </>
                             )}
@@ -722,7 +723,7 @@ export default function AddCampaign() {
                             render={({ field }) => (
                               <>
                                 <Select
-                                    value={schoolArr.find((el) => el.value === field.value)}
+                                    value={schoolArr.find((el) => el.value === field.value) || null}
                                     onChange={(e) => field.onChange(e.value)}
                                     options={schoolArr}
                                   />
