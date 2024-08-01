@@ -8,10 +8,39 @@ import CustomButton from '../Utility/Button';
 import { DashboardBox, DashboardTable } from '../Utility/DashboardBox';
 import { toastError, toastSuccess } from '../Utility/ToastUtils';
 import AddLeadStatus from './AddLeadStatus';
+import { ConfirmModal } from '../Utility/ConfirmationModal';
+
+const COMFIRMATION_DATA = {
+    delete: {
+        type:"delete",
+        heading: "Are you sure ?", 
+        title:"You can't revert changes"
+    },
+}
 export default function LeadStatus() {
     // ==============================================================================================================
     const [leadStatusArr, setleadStatusArr] = useState([]);
     const [changeCount, setChangeCount] = useState(0);
+    const [confirmModal, setConfirmModal] = useState(false);
+    const[confirmModalData,setConfirmModalData] = useState({})
+
+    const openConfirmModal = (data)=>{
+        setConfirmModal(true);
+        setConfirmModalData({...data});
+    }
+
+    const OnModalConfirm = (data) => {
+        setConfirmModal(false);
+        switch (data.type){
+            case "delete":{
+                handleDelete(data.row_id)
+                break;
+            }
+            default :
+                break;
+        }
+    }
+
     const category_columns = [
         {
             name: "ID",
@@ -30,7 +59,7 @@ export default function LeadStatus() {
                 <>
                     <ActionIcon
                         isRedirected={true}
-                        onDeleteClick={() => handleDelete(row._id)}
+                        onDeleteClick={() => openConfirmModal({...COMFIRMATION_DATA.delete, row_id: row._id})}
                         deletePath="/Lead-Status"
                         remove
                         Uniquekey={row?.id}
@@ -121,6 +150,13 @@ export default function LeadStatus() {
                     </div>
                 </div>
             </section>
+            <ConfirmModal
+                ModalBox={confirmModal}
+                modalData= {confirmModalData}
+                onCancel = {()=>{setConfirmModal(false);}}
+                onConfirm={OnModalConfirm}
+            >
+            </ConfirmModal>
         </main>
     );
 }

@@ -9,9 +9,39 @@ import CustomButton from "../Utility/Button";
 import { DashboardBox, DashboardTable } from "../Utility/DashboardBox";
 import { toastError, toastSuccess } from "../Utility/ToastUtils";
 import AddLinkedInAccount from "./AddLinkedInAccount";
+import { ConfirmModal } from '../Utility/ConfirmationModal';
+
+const COMFIRMATION_DATA = {
+    delete_user: {
+        type:"delete_user",
+        heading: "Are you sure ?", 
+        title:"You can't revert changes"
+    },
+}
+
 export default function LinkedInAccounts() {
   // ==============================================================================================================
   const [categoryArr, setCategoryArr] = useState([]);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const[confirmModalData,setConfirmModalData] = useState({})
+
+    const openConfirmModal = (data)=>{
+        setConfirmModal(true);
+        setConfirmModalData({...data});
+    }
+
+    const OnModalConfirm = (data) => {
+        setConfirmModal(false);
+        switch (data.type){
+            case "delete_user":{
+                handleDelete(data.row_id)
+                break;
+            }
+            default :
+                break;
+        }
+    }
+
   const category_columns = [
     {
       name: "ID",
@@ -34,7 +64,7 @@ export default function LinkedInAccounts() {
         <>
           <ActionIcon
             isRedirected={true}
-            onDeleteClick={() => handleDelete(row._id)}
+            onDeleteClick={() => openConfirmModal({...COMFIRMATION_DATA.delete_user, row_id: row._id})}
             deletePath="/LinkedInAccounts"
             remove
             Uniquekey={row?.id}
@@ -134,6 +164,13 @@ export default function LinkedInAccounts() {
           </div>
         </div>
       </section>
+      <ConfirmModal
+          ModalBox={confirmModal}
+          modalData= {confirmModalData}
+          onCancel = {()=>{setConfirmModal(false);}}
+          onConfirm={OnModalConfirm}
+      >
+      </ConfirmModal>
     </main>
   );
 }
