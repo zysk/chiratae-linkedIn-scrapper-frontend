@@ -119,7 +119,7 @@ export default function AddCampaign() {
       setImageData(null);
       setLoading(true);
       let obj = {
-        name : data.campaign_name,
+        name: data.campaign_name,
         searchQuery: data.search_query,
         company: data.company,
         school: data.school,
@@ -154,7 +154,7 @@ export default function AddCampaign() {
       console.log("res", res);
       setDisableAllButton(true);
 
-      if(res?.data?.error){
+      if (res?.data?.error) {
         toastError(res?.data?.error);
         checkLoginOnInit();
       }
@@ -347,12 +347,12 @@ export default function AddCampaign() {
         return;
       }
 
-      
+
       let { data: res } = await campaignLinklogin({
         accountName,
         password: Buffer.from(password).toString("base64"),
       });
-      
+
       if (res?.error) {
         toastError(res?.error);
         checkLoginOnInit();
@@ -416,70 +416,70 @@ export default function AddCampaign() {
     setAccountName(value.name);
     setPassword(value.password);
   };
-  
+
   const handleChangeProxyValue = (value) => {
     console.log(value);
     setProxyId(value.value);
   };
 
-	const getValidationSchema = () => { 
-		return useTextInputs? schema : schemaDefault;
-	}
+  const getValidationSchema = () => {
+    return useTextInputs ? schema : schemaDefault;
+  }
 
-	const schema = yup.object().shape({
-		campaign_name: yup.string()
-						.required("Campaign Name is Required")
-						.min(3, "Campaign Name should be at least 3 characters")
-						.max(50, "Campaign Name should not exceed 50 characters"),
-		search_query: yup.string()
-						.required("Search Query is Required")
-						.min(3, "Search Query should be at least 3 characters")
-						.max(50, "Search Query should not exceed 50 characters"),
-		company: yup.string()
-						.required("Company Name is Required")
-						.min(3, "Company Name should be at least 3 characters")
-						.max(50, "Company Name should not exceed 50 characters"),
-		past_company: yup.string()
-						// .required("Past Company Name is Required")
-						// .min(3, "Past Company Name should be at least 3 characters")
-						.max(50, "Past Company Name should not exceed 50 characters"),
-		school: yup.string()
-						.required("School Name is Required")
-						.min(3, "School Name should be at least 3 characters")
-						.max(50, "School Name should not exceed 50 characters"),
-	});
+  const schema = yup.object().shape({
+    campaign_name: yup.string()
+      .required("Campaign Name is Required")
+      .min(3, "Campaign Name should be at least 3 characters")
+      .max(50, "Campaign Name should not exceed 50 characters"),
+    search_query: yup.string()
+      .required("Search Query is Required")
+      .min(3, "Search Query should be at least 3 characters")
+      .max(50, "Search Query should not exceed 50 characters"),
+    company: yup.string()
+      .required("Company Name is Required")
+      .min(3, "Company Name should be at least 3 characters")
+      .max(50, "Company Name should not exceed 50 characters"),
+    past_company: yup.string()
+      // .required("Past Company Name is Required")
+      // .min(3, "Past Company Name should be at least 3 characters")
+      .max(50, "Past Company Name should not exceed 50 characters"),
+    school: yup.string()
+      .required("School Name is Required")
+      .min(3, "School Name should be at least 3 characters")
+      .max(50, "School Name should not exceed 50 characters"),
+  });
 
-	const schemaDefault = yup.object().shape({
-		campaign_name: yup.string()
-						.required("Campaign Name is Required")
-						.min(3, "Campaign Name should be at least 3 characters")
-						.max(50, "Campaign Name should not exceed 50 characters"),
-		search_query: yup.string()
-						.required("Search Query is Required")
-						.min(3, "Search Query should be at least 3 characters")
-						.max(50, "Search Query should not exceed 50 characters"),
-		company: yup.string()
-						.required("Company Name is Required"),
-		past_company: yup.string(),
-						// .required("Past Company Name is Required"),
-		school: yup.string()
-						.required("School Name is Required")
-	});
+  const schemaDefault = yup.object().shape({
+    campaign_name: yup.string()
+      .required("Campaign Name is Required")
+      .min(3, "Campaign Name should be at least 3 characters")
+      .max(50, "Campaign Name should not exceed 50 characters"),
+    search_query: yup.string()
+      .required("Search Query is Required")
+      .min(3, "Search Query should be at least 3 characters")
+      .max(50, "Search Query should not exceed 50 characters"),
+    company: yup.string()
+      .required("Company Name is Required"),
+    past_company: yup.string(),
+    // .required("Past Company Name is Required"),
+    school: yup.string()
+      .required("School Name is Required")
+  });
 
   const { control, handleSubmit, formState: { errors, isSubmitting, isValid }, reset } = useForm({
-		resolver: yupResolver(getValidationSchema()),
-		defaultValues:{
-			campaign_name: "",
-			search_query: "",
-			company: "",
-			past_company: "",
-			school: "",
-		}
-	  });
-  
+    resolver: yupResolver(getValidationSchema()),
+    defaultValues: {
+      campaign_name: "",
+      search_query: "",
+      company: "",
+      past_company: "",
+      school: "",
+    }
+  });
+
   const onSubmitHandler = (data) => {
-		handleBasicSearch(data)
-	};
+    handleBasicSearch(data)
+  };
   return (
     <div className="newpaddingtoplefgt">
       <section className="mb-5">
@@ -524,7 +524,7 @@ export default function AddCampaign() {
                   </h3>
                   <div className="col-3">
                     <Select
-                      onChange={(e) => {setUseTextInputs(e.value); reset({company:'',past_company:'',school:''});}}
+                      onChange={(e) => { setUseTextInputs(e.value); reset({ company: '', past_company: '', school: '' }); }}
                       className="dropdownmenui"
                       defaultValue={{
                         label: `Use default inputs`,
@@ -544,23 +544,23 @@ export default function AddCampaign() {
 
                   <h4 className="blue-1 font6updateadmin mb-4">Campaign Name</h4>
                   <Controller
-                      name="campaign_name"
-                      control={control}
-                      render={({ field }) => (
-                          <TextField
-                            sx={{ borderRadius: 5 }}
-                            id="outlined-basic"
-                            label="Campaign Name"
-                            variant="outlined"
-                            value = {field.value}
-                            onChange={(e) => field.onChange(e.target.value)}
-                            placeholder="Enter Campaign Name"
-                            className="form-control muiinput"
-                          />
-                        )}
-                        />
-                        {errors.campaign_name && <div className="text-danger mt-1">{errors.campaign_name.message}</div>}
-                  
+                    name="campaign_name"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        sx={{ borderRadius: 5 }}
+                        id="outlined-basic"
+                        label="Campaign Name"
+                        variant="outlined"
+                        value={field.value}
+                        onChange={(e) => field.onChange(e.target.value)}
+                        placeholder="Enter Campaign Name"
+                        className="form-control muiinput"
+                      />
+                    )}
+                  />
+                  {errors.campaign_name && <div className="text-danger mt-1">{errors.campaign_name.message}</div>}
+
                   <div className="col-lg-12 py-4">
                     <div className="borderbotm"></div>
                   </div>
@@ -581,25 +581,24 @@ export default function AddCampaign() {
 
                   <div className="row">
                     <div className="col-lg-6 col-sm-6 col-md-6">
-                    <Controller
-                      name="search_query"
-                      control={control}
-                      render={({ field }) => (
+                      <Controller
+                        name="search_query"
+                        control={control}
+                        render={({ field }) => (
                           <TextField
                             id="outlined-basic"
                             label="Search query"
                             variant="outlined"
                             className="form-control muiinput"
                             placeholder="Search Query"
-                            value = {field.value}
+                            value={field.value}
                             onChange={(e) => field.onChange(e.target.value)}
                           />
                         )}
-                        />
-                        {errors.search_query && <div className="text-danger mt-1">{errors.search_query.message}</div>}
+                      />
+                      {errors.search_query && <div className="text-danger mt-1">{errors.search_query.message}</div>}
                     </div>
-                    <div className="col-lg-6 col-sm-6 col-md-6">
-                      {/* <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Search Query' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
+                    {/* <div className="col-lg-6 col-sm-6 col-md-6">
 
                       {useTextInputs ? (
                         <>
@@ -642,32 +641,44 @@ export default function AddCampaign() {
                         </>
                         
                       )}
+                    </div> */}
+
+                    <div className='col-lg-6 col-sm-6 col-md-6'>
+                      {/* <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Search Query' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
+
+                      {
+                        !useTextInputs ?
+
+                          <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Company' value={company} onChange={(e) => setCompany(e.target.value)} />
+                          :
+                          <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Company' value={''} onChange={(e) => setCompany(e.target.value)} />
+                      }
                     </div>
                   </div>
-                  <div className="row mt-5">
+                  {/* <div className="row mt-5">
                     <div className="col-lg-6">
                       {useTextInputs ? (
                         <>
-                        <Controller
-                          name="past_company"
-                          control={control}
-                          render={({ field }) => (
-                            <>
-                              <TextField
-                                id="outlined-basic"
-                                label="Past Company"
-                                variant="outlined"
-                                className="form-control muiinput"
-                                placeholder="Past Company"
-                                value={field.value}
-                                onChange={(e) => field.onChange(e.target.value)}
-                              />
-                            </>
-                          )}
-                        />
-                        {errors.past_company && <div className="text-danger mt-1">{errors.past_company.message}</div>}
-                      </>
-                        
+                          <Controller
+                            name="past_company"
+                            control={control}
+                            render={({ field }) => (
+                              <>
+                                <TextField
+                                  id="outlined-basic"
+                                  label="Past Company"
+                                  variant="outlined"
+                                  className="form-control muiinput"
+                                  placeholder="Past Company"
+                                  value={field.value}
+                                  onChange={(e) => field.onChange(e.target.value)}
+                                />
+                              </>
+                            )}
+                          />
+                          {errors.past_company && <div className="text-danger mt-1">{errors.past_company.message}</div>}
+                        </>
+
                       ) : (
 
                         <>
@@ -677,43 +688,43 @@ export default function AddCampaign() {
                             render={({ field }) => (
                               <>
                                 <Select
-                                    value={
-                                      companyArr.find((el) => el.value === field.value) || null
+                                  value={
+                                    companyArr.find((el) => el.value === field.value) || null
                                   }
-                                    onChange={(e) => e ? field.onChange(e.value): field.onChange("")}
-                                    options={companyArr}
-                                    isClearable
-                                  />
+                                  onChange={(e) => e ? field.onChange(e.value) : field.onChange("")}
+                                  options={companyArr}
+                                  isClearable
+                                />
                               </>
                             )}
                           />
                           {errors.past_company && <div className="text-danger mt-1">{errors.past_company.message}</div>}
                         </>
-                        
+
                       )}
                     </div>
                     <div className="col-lg-6">
                       {useTextInputs ? (
                         <>
-                        <Controller
-                        name="school"
-                        control={control}
-                        render={({ field }) => (
-                          <>
-                            <TextField
-                                id="outlined-basic"
-                                label="School"
-                                variant="outlined"
-                                className="form-control muiinput"
-                                placeholder="School"
-                                value={field.value}
-                                onChange={(e) => field.onChange(e.target.value)}
-                              />
-                          </>
-                        )}
-                      />
-                      {errors.school && <div className="text-danger mt-1">{errors.school.message}</div>}
-                        
+                          <Controller
+                            name="school"
+                            control={control}
+                            render={({ field }) => (
+                              <>
+                                <TextField
+                                  id="outlined-basic"
+                                  label="School"
+                                  variant="outlined"
+                                  className="form-control muiinput"
+                                  placeholder="School"
+                                  value={field.value}
+                                  onChange={(e) => field.onChange(e.target.value)}
+                                />
+                              </>
+                            )}
+                          />
+                          {errors.school && <div className="text-danger mt-1">{errors.school.message}</div>}
+
                         </>
                       ) : (
                         <>
@@ -723,17 +734,36 @@ export default function AddCampaign() {
                             render={({ field }) => (
                               <>
                                 <Select
-                                    value={schoolArr.find((el) => el.value === field.value) || null}
-                                    onChange={(e) => field.onChange(e.value)}
-                                    options={schoolArr}
-                                  />
+                                  value={schoolArr.find((el) => el.value === field.value) || null}
+                                  onChange={(e) => field.onChange(e.value)}
+                                  options={schoolArr}
+                                />
                               </>
                             )}
                           />
                           {errors.school && <div className="text-danger mt-1">{errors.school.message}</div>}
                         </>
-                        
+
                       )}
+                    </div>
+                  </div> */}
+
+                  <div className='row mt-5'>
+                    <div className='col-lg-6'>
+                      {
+                        !useTextInputs ?
+                          <TextField id="outlined-basic" label="Past Company" variant="outlined" className='form-control muiinput' placeholder='Past Company' value={pastCompany} onChange={(e) => setPastCompany(e.target.value)} />
+                          :
+                          <TextField id="outlined-basic" label="Past Company" variant="outlined" className='form-control muiinput' placeholder='Past Company' value={''} onChange={(e) => setPastCompany(e.target.value)} />
+                      }
+                    </div>
+                    <div className='col-lg-6'>
+                      {
+                        !useTextInputs ?
+                          <TextField id="outlined-basic" label="School" variant="outlined" className='form-control muiinput' placeholder='School' value={school} onChange={(e) => setSchool(e.target.value)} />
+                          :
+                          <TextField id="outlined-basic" label="School" variant="outlined" className='form-control muiinput' placeholder='School' value={''} onChange={(e) => setSchool(e.target.value)} />
+                      }
                     </div>
                   </div>
 
@@ -758,10 +788,10 @@ export default function AddCampaign() {
                             options={
                               linkedInAccountArr && linkedInAccountArr.length > 0
                                 ? linkedInAccountArr.map((el) => ({
-                                    label: `${el.name}`,
-                                    value: el._id,
-                                    ...el,
-                                  }))
+                                  label: `${el.name}`,
+                                  value: el._id,
+                                  ...el,
+                                }))
                                 : []
                             }
                           />
@@ -795,7 +825,7 @@ export default function AddCampaign() {
                       <button
                         disabled={loading || showLogin}
                         type={"submit"}
-                        className={`${(!isValid || showLogin) ? "cursor-not-allowed":''}`}
+                        className={`${(!isValid || showLogin) ? "cursor-not-allowed" : ''}`}
                         style={{
                           outline: "none",
                           border: "none",
@@ -811,9 +841,9 @@ export default function AddCampaign() {
                         {loading ? "Loading..." : "Start Searching"}
                       </button>
                       {
-                        showLogin && 
+                        showLogin &&
                         <p className="fw-bold pt-2">
-                              <i class="fa fa-info-circle" aria-hidden="true"></i> Linked Login is required to proceed with New Campaing Creation
+                          <i class="fa fa-info-circle" aria-hidden="true"></i> Linked Login is required to proceed with New Campaing Creation
                         </p>}
                       {/* <button disabled={loading} onClick={() => setSchedule(true)} type={"button"} style={{ outline: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, border: "#D68392 solid 1px", marginTop: "15px", backgroundColor: 'white' }}>Set Schedule Date</button> */}
                     </>
@@ -926,7 +956,7 @@ export default function AddCampaign() {
                   )}
 
                 </form>
-              
+
               </DashboardBox>
 
               {/* <div>
@@ -990,7 +1020,7 @@ export default function AddCampaign() {
                     </div> */}
           </div>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }
