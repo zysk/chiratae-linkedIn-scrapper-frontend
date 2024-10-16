@@ -31,8 +31,6 @@ export default function AddCampaign() {
   const [resultsArr, setResultsArr] = useState([]);
   const [page, setPage] = useState(1);
 
-  const [phoneverified, setPhoneVerified] = useState(true);
-
   const [school, setSchool] = useState(
     "Indian Institute of Technology Delhi,Indian Institute of Technology Patna,Indian Institute of Technology Kharagpur,Indian Institute of Technology Kanpur,Indian Institute of Technology Roorkee,Indian Institute of Technology Madras,Indian Institute of Technology Bombay,Indian Institute of Management Ahmedabad,Indian Institute of Management Bangalore,Indian Institute of Management Calcutta,Birla Institute of Technology and Science,Shri Ram College of Commerce,Lady Shri Ram College"
   );
@@ -950,9 +948,7 @@ export default function AddCampaign() {
                   )}
 
                   {/* For Phone interaction */}
-
-
-                  {phoneverified && (
+                  {verification.phoneIntractionRequired && (
                     <>
                       <h6 className="blue-1 mt-2">Click on the button below once the verification is done.</h6>
                       <h6 className="blue-1 mt-2">{verification.phoneMessage}</h6>
