@@ -44,6 +44,18 @@ export const campaignVerifyOtp = (formData) => {
   });
 };
 
+export const campaignVerifyPhoneInteraction = () => {
+  return axiosApiInstance.post(serverUrl + "/linkchecklogin", {
+    timeout: 10000000000000,
+  });
+};
+
+export const resendPhoneVerification = () => {
+  return axiosApiInstance.post(serverUrl + "/resendPhoneCheck", {
+    timeout: 10000000000000,
+  });
+};
+
 export const campaignLinkSearch = (formData) => {
     return axiosApiInstance.post(serverUrl + "/linkSearch", formData, { timeout: 10000000000000 });
 };

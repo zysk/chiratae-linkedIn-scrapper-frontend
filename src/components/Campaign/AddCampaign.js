@@ -10,6 +10,8 @@ import {
   logoutAccount,
   addCampaignToQueue,
   campaignVerifyOtp,
+  campaignVerifyPhoneInteraction,
+  resendPhoneVerification,
 } from "../../services/Campaign.service";
 import { getlinkedInAccount } from "../../services/LinkedInAccounts.service";
 import { getproxies } from "../../services/Proxy.service";
@@ -28,6 +30,9 @@ export default function AddCampaign() {
   const [searchQuery, setSearchQuery] = useState("co Founder");
   const [resultsArr, setResultsArr] = useState([]);
   const [page, setPage] = useState(1);
+
+  const [phoneverified, setPhoneVerified] = useState(true);
+
   const [school, setSchool] = useState(
     "Indian Institute of Technology Delhi,Indian Institute of Technology Patna,Indian Institute of Technology Kharagpur,Indian Institute of Technology Kanpur,Indian Institute of Technology Roorkee,Indian Institute of Technology Madras,Indian Institute of Technology Bombay,Indian Institute of Management Ahmedabad,Indian Institute of Management Bangalore,Indian Institute of Management Calcutta,Birla Institute of Technology and Science,Shri Ram College of Commerce,Lady Shri Ram College"
   );
@@ -212,6 +217,26 @@ export default function AddCampaign() {
     setLoading(false);
   };
 
+  // Handle phone interaction Button click
+  const handlePhoneInteraction = async () => {
+    try {
+    let res = await campaignVerifyPhoneInteraction();
+    console.log("ress", res);
+    } catch (error) {
+    console.log("ress", error);
+    }
+  };
+  
+  // Resend phone interaction notification
+  const resendNotification = async () => {
+    try {
+    let res = await resendPhoneVerification();
+    console.log("ress", res);
+    } catch (error) {
+    console.log("ress", error);
+    }
+  };
+
   const checkLoginOnInit = async () => {
     try {
       setLoading(true);
@@ -369,6 +394,13 @@ export default function AddCampaign() {
         setVerification({
           otpMessage: res?.otpMessage,
           otpRequired: res?.otpRequired,
+        });
+        setLoading(false);
+      } else if (res.phoneIntractionRequired) {
+        toastWarning("Phone interaction Needed");
+        setVerification({
+          otpMessage: res?.phoneMessage,
+          otpRequired: res?.phoneIntractionRequired,
         });
         setLoading(false);
       } else {
@@ -916,6 +948,54 @@ export default function AddCampaign() {
                       </button>
                     </>
                   )}
+
+                  {/* For Phone interaction */}
+
+
+                  {phoneverified && (
+                    <>
+                      <h6 className="blue-1 mt-2">Click on the button below once the verification is done.</h6>
+                      <h6 className="blue-1 mt-2">{verification.phoneMessage}</h6>
+                      
+                      <button
+                        onClick={() => handlePhoneInteraction()}
+                        type={"button"}
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          width: 300,
+                          marginRight: 10,
+                          padding: "10px 70px",
+                          borderRadius: 10,
+                          backgroundColor: "#D68392",
+                          marginTop: "15px",
+                          color: "white",
+                        }}
+                      >
+                        {loading ? "Loading..." : "Verified"}
+                      </button>
+
+                      
+                      <button
+                        onClick={() => resendNotification()}
+                        type={"button"}
+                        style={{
+                          outline: "none",
+                          border: "none",
+                          width: 300,
+                          marginRight: 10,
+                          padding: "10px 70px",
+                          borderRadius: 10,
+                          backgroundColor: "#D68392",
+                          marginTop: "15px",
+                          color: "white",
+                        }}
+                      >
+                        {loading ? "Sending..." : "Resend Notification"}
+                      </button>
+                    </>
+                  )}
+                  {/* End */}
 
                   {/* hanlde search submit button */}
                   {schedule && (
