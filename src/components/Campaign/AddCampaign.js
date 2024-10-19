@@ -216,12 +216,15 @@ export default function AddCampaign() {
       console.log("ress", error);
       toastError(error);
     }
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   };
 
   // Handle phone interaction Button click
   const handlePhoneInteraction = async () => {
     console.log("THis")
+    setLoading(true);
     try {
       let res = await campaignVerifyPhoneInteraction();
       // setDisableAllButton(true);
@@ -246,16 +249,22 @@ export default function AddCampaign() {
       console.log("ress", error);
       toastError(error);
     }
-    setLoading(false);
+    finally {
+      setLoading(false);
+    }
   };
 
   // Resend phone interaction notification
   const resendNotification = async () => {
+    setLoading(true);
     try {
       let res = await resendPhoneVerification();
       console.log("ress", res);
     } catch (error) {
       console.log("ress", error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -281,8 +290,10 @@ export default function AddCampaign() {
         toastSuccess(res.data.message);
       }
     } catch (error) {
-      setLoading(false);
       console.error(error);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -358,8 +369,10 @@ export default function AddCampaign() {
         setResultsArr([...res.data.resultsArr]);
       }
     } catch (err) {
-      setLoading(false);
       toastError(err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -441,8 +454,10 @@ export default function AddCampaign() {
         checkLoginOnInit();
       }
     } catch (err) {
-      setLoading(true);
       toastError(err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -459,6 +474,9 @@ export default function AddCampaign() {
     } catch (err) {
       setLoading(true);
       toastError(err);
+    }
+    finally {
+      setLoading(false);
     }
   };
 
@@ -571,7 +589,7 @@ export default function AddCampaign() {
                         borderRadius: 10,
                       }}
                     >
-                      Logout
+                      {loading ? 'Logging Out...' : 'Logout'}
                     </button>
                   </div>
                 )}
@@ -856,7 +874,7 @@ export default function AddCampaign() {
                         </div>
                         <div className="col-6">
                           <button
-                            disabled={loading}
+                            disabled={loading || !showLogin}
                             onClick={() => handleLogin()}
                             type={"button"}
                             style={{
@@ -870,7 +888,7 @@ export default function AddCampaign() {
                               color: "white",
                             }}
                           >
-                            {loading ? "Loading..." : "Login"}
+                            {loading ? "Logging..." : "Login"}
                           </button>
                         </div>
                       </div>
@@ -896,13 +914,20 @@ export default function AddCampaign() {
                           color: "white",
                         }}
                       >
-                        {loading ? "Loading..." : "Start Searching"}
+                        {loading ? "Searching..." : "Start Searching"}
                       </button>
                       {
-                        showLogin &&
-                        <p className="fw-bold pt-2">
-                          <i class="fa fa-info-circle" aria-hidden="true"></i> Linked Login is required to proceed with New Campaing Creation
-                        </p>}
+                        showLogin && (
+                          <>
+                            <p className="fw-bold" style={{ marginBottom: 0 }}>
+                              <i className="fa fa-info-circle" aria-hidden="true" /> Linked Login is required to proceed with New Campaing Creation
+                            </p>
+                            <p className="fw-bold">
+                              <i className="fa fa-info-circle" aria-hidden="true" /> Please make sure to turn off two step verification before login
+                            </p>
+                          </>
+                        )
+                      }
                       {/* <button disabled={loading} onClick={() => setSchedule(true)} type={"button"} style={{ outline: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, border: "#D68392 solid 1px", marginTop: "15px", backgroundColor: 'white' }}>Set Schedule Date</button> */}
                     </>
                   )}
