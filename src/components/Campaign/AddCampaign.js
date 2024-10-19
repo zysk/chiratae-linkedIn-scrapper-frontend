@@ -173,8 +173,8 @@ export default function AddCampaign() {
         setCaptchaMessage(res.data.captchaMessage);
       } else {
         setVerification({
-          otpMessage: res.data.otpMessage,
-          otpRequired: res.data.otpRequired,
+          otpMessage: res.data?.otpMessage,
+          otpRequired: res.data?.otpRequired,
         });
         // checkLoginOnInit();
         setImageData(null);
@@ -202,7 +202,8 @@ export default function AddCampaign() {
         toastSuccess("Login Successful");
       } else if (
         res?.data?.otpRequired == false &&
-        res?.data?.isCaptcha == false
+        res?.data?.isCaptcha == false &&
+        res?.data?.phoneIntractionRequired == false
       ) {
         checkLoginOnInit();
         toastSuccess("Login Successful");
@@ -217,21 +218,38 @@ export default function AddCampaign() {
 
   // Handle phone interaction Button click
   const handlePhoneInteraction = async () => {
+    console.log("THis")
     try {
-    let res = await campaignVerifyPhoneInteraction();
-    console.log("ress", res);
+      let res = await campaignVerifyPhoneInteraction();
+      // setDisableAllButton(true);
+      console.log(res.data);
+      if (res?.data?.phoneIntractionRequired == false) {
+        setVerification(null);
+        checkLoginOnInit();
+        toastSuccess("Login Successful");
+      } else if (
+        res?.data?.phoneIntractionRequired == false &&
+        res?.data?.isCaptcha == false &&
+        res?.data?.otpRequired == false
+      ) {
+        checkLoginOnInit();
+        toastSuccess("Login Successful");
+      }
+      // setVerification(null);
     } catch (error) {
-    console.log("ress", error);
+      console.log("ress", error);
+      toastError(error);
     }
+    setLoading(false);
   };
-  
+
   // Resend phone interaction notification
   const resendNotification = async () => {
     try {
-    let res = await resendPhoneVerification();
-    console.log("ress", res);
+      let res = await resendPhoneVerification();
+      console.log("ress", res);
     } catch (error) {
-    console.log("ress", error);
+      console.log("ress", error);
     }
   };
 
@@ -248,6 +266,10 @@ export default function AddCampaign() {
       if (!res.data.isLogin) {
         toastWarning(res.data.message);
         setShowLogin(true);
+        setVerification({
+          phoneMessage: '',
+          phoneIntractionRequired: '',
+        });
         setLoading(false);
       } else {
         toastSuccess(res.data.message);
@@ -387,7 +409,7 @@ export default function AddCampaign() {
         setImageData(res.imgUrl);
         setCaptchaMessage(res.captchaMessage);
         setLoading(false);
-      } else if (res.otpRequired) {
+      } else if (res?.otpRequired) {
         toastWarning("Otp Verification Needed");
         setVerification({
           otpMessage: res?.otpMessage,
@@ -397,8 +419,8 @@ export default function AddCampaign() {
       } else if (res.phoneIntractionRequired) {
         toastWarning("Phone interaction Needed");
         setVerification({
-          otpMessage: res?.phoneMessage,
-          otpRequired: res?.phoneIntractionRequired,
+          phoneMessage: res?.phoneMessage,
+          phoneIntractionRequired: res?.phoneIntractionRequired,
         });
         setLoading(false);
       } else {
@@ -916,7 +938,7 @@ export default function AddCampaign() {
                     </>
                   )}
 
-                  {verification.otpRequired && (
+                  {verification?.otpRequired && (
                     <>
                       <h6 className="blue-1 mt-2">OTP Required</h6>
                       <h6 className="blue-1 mt-2">{verification.otpMessage}</h6>
@@ -948,11 +970,11 @@ export default function AddCampaign() {
                   )}
 
                   {/* For Phone interaction */}
-                  {verification.phoneIntractionRequired && (
+                  {verification.phoneIntractionRequired ?  (
                     <>
                       <h6 className="blue-1 mt-2">Click on the button below once the verification is done.</h6>
                       <h6 className="blue-1 mt-2">{verification.phoneMessage}</h6>
-                      
+
                       <button
                         onClick={() => handlePhoneInteraction()}
                         type={"button"}
@@ -971,7 +993,7 @@ export default function AddCampaign() {
                         {loading ? "Loading..." : "Verified"}
                       </button>
 
-                      
+
                       <button
                         onClick={() => resendNotification()}
                         type={"button"}
@@ -990,7 +1012,7 @@ export default function AddCampaign() {
                         {loading ? "Sending..." : "Resend Notification"}
                       </button>
                     </>
-                  )}
+                  ):null} 
                   {/* End */}
 
                   {/* hanlde search submit button */}
