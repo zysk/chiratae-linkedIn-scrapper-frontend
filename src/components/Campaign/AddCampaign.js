@@ -193,11 +193,14 @@ export default function AddCampaign() {
       let obj = {
         otp,
       };
-      let res = await campaignVerifyOtp(obj);
+      let res = await campaignVerifyOtp(obj); // otpRequired: false
       // setDisableAllButton(true);
       console.log("ress", res);
       if (res?.data?.otpRequired == false) {
-        setVerification(null);
+        setVerification({
+          otpMessage: "",
+          otpRequired: "",
+        });
         checkLoginOnInit();
         toastSuccess("Login Successful");
       } else if (
@@ -223,18 +226,21 @@ export default function AddCampaign() {
       let res = await campaignVerifyPhoneInteraction();
       // setDisableAllButton(true);
       console.log(res.data);
-      if (res?.data?.phoneIntractionRequired == false) {
-        setVerification(null);
+      if (res?.data?.isLogin) {
         checkLoginOnInit();
-        toastSuccess("Login Successful");
-      } else if (
-        res?.data?.phoneIntractionRequired == false &&
-        res?.data?.isCaptcha == false &&
-        res?.data?.otpRequired == false
-      ) {
-        checkLoginOnInit();
-        toastSuccess("Login Successful");
       }
+      // if (res?.data?.phoneIntractionRequired == false) {
+      //   setVerification(null);
+      //   checkLoginOnInit();
+      //   toastSuccess("Login Successful");
+      // } else if (
+      //   res?.data?.phoneIntractionRequired == false &&
+      //   res?.data?.isCaptcha == false &&
+      //   res?.data?.otpRequired == false
+      // ) {
+      //   checkLoginOnInit();
+      //   toastSuccess("Login Successful");
+      // }
       // setVerification(null);
     } catch (error) {
       console.log("ress", error);
@@ -970,7 +976,7 @@ export default function AddCampaign() {
                   )}
 
                   {/* For Phone interaction */}
-                  {verification.phoneIntractionRequired ?  (
+                  {(verification.phoneIntractionRequired && !isLoggedIn) ? (
                     <>
                       <h6 className="blue-1 mt-2">Click on the button below once the verification is done.</h6>
                       <h6 className="blue-1 mt-2">{verification.phoneMessage}</h6>
@@ -1012,7 +1018,7 @@ export default function AddCampaign() {
                         {loading ? "Sending..." : "Resend Notification"}
                       </button>
                     </>
-                  ):null} 
+                  ) : null}
                   {/* End */}
 
                   {/* hanlde search submit button */}
