@@ -19,8 +19,8 @@ import { toastError } from "../../utils/toastUtils";
 import { DashboardBox } from "../Utility/DashboardBox";
 import { toastSuccess, toastWarning } from "../Utility/ToastUtils";
 import { TextField } from "@mui/material";
-import { Controller, useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 export default function AddCampaign() {
@@ -140,7 +140,7 @@ export default function AddCampaign() {
       console.log(res);
       toastSuccess(res.message);
       setDisableAllButton(true);
-      reset({})
+      reset({});
     } catch (error) {
       setLoading(false);
       toastError(error);
@@ -215,15 +215,13 @@ export default function AddCampaign() {
     } catch (error) {
       console.log("ress", error);
       toastError(error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
   // Handle phone interaction Button click
   const handlePhoneInteraction = async () => {
-    console.log("THis")
     setLoading(true);
     try {
       let res = await campaignVerifyPhoneInteraction();
@@ -248,8 +246,7 @@ export default function AddCampaign() {
     } catch (error) {
       console.log("ress", error);
       toastError(error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -262,8 +259,7 @@ export default function AddCampaign() {
       console.log("ress", res);
     } catch (error) {
       console.log("ress", error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -282,8 +278,8 @@ export default function AddCampaign() {
         toastWarning(res.data.message);
         setShowLogin(true);
         setVerification({
-          phoneMessage: '',
-          phoneIntractionRequired: '',
+          phoneMessage: "",
+          phoneIntractionRequired: "",
         });
         setLoading(false);
       } else {
@@ -291,8 +287,7 @@ export default function AddCampaign() {
       }
     } catch (error) {
       console.error(error);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -370,8 +365,7 @@ export default function AddCampaign() {
       }
     } catch (err) {
       toastError(err);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -410,7 +404,6 @@ export default function AddCampaign() {
         toastError("Please select account to login with");
         return;
       }
-
 
       let { data: res } = await campaignLinklogin({
         accountName,
@@ -455,8 +448,7 @@ export default function AddCampaign() {
       }
     } catch (err) {
       toastError(err);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -474,8 +466,7 @@ export default function AddCampaign() {
     } catch (err) {
       setLoading(true);
       toastError(err);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -500,49 +491,59 @@ export default function AddCampaign() {
 
   const getValidationSchema = () => {
     return useTextInputs ? schema : schemaDefault;
-  }
+  };
 
   const schema = yup.object().shape({
-    campaign_name: yup.string()
+    campaign_name: yup
+      .string()
       .required("Campaign Name is Required")
       .min(3, "Campaign Name should be at least 3 characters")
       .max(50, "Campaign Name should not exceed 50 characters"),
-    search_query: yup.string()
+    search_query: yup
+      .string()
       .required("Search Query is Required")
       .min(3, "Search Query should be at least 3 characters")
       .max(50, "Search Query should not exceed 50 characters"),
-    company: yup.string()
+    company: yup
+      .string()
       .required("Company Name is Required")
       .min(3, "Company Name should be at least 3 characters")
       .max(50, "Company Name should not exceed 50 characters"),
-    past_company: yup.string()
+    past_company: yup
+      .string()
       // .required("Past Company Name is Required")
       // .min(3, "Past Company Name should be at least 3 characters")
       .max(50, "Past Company Name should not exceed 50 characters"),
-    school: yup.string()
+    school: yup
+      .string()
       .required("School Name is Required")
       .min(3, "School Name should be at least 3 characters")
       .max(50, "School Name should not exceed 50 characters"),
   });
 
   const schemaDefault = yup.object().shape({
-    campaign_name: yup.string()
+    campaign_name: yup
+      .string()
       .required("Campaign Name is Required")
       .min(3, "Campaign Name should be at least 3 characters")
       .max(50, "Campaign Name should not exceed 50 characters"),
-    search_query: yup.string()
+    search_query: yup
+      .string()
       .required("Search Query is Required")
       .min(3, "Search Query should be at least 3 characters")
       .max(50, "Search Query should not exceed 50 characters"),
-    company: yup.string()
-      .required("Company Name is Required"),
+    company: yup.string().required("Company Name is Required"),
     past_company: yup.string(),
     // .required("Past Company Name is Required"),
-    school: yup.string()
-      .required("School Name is Required")
+    school: yup.string().required("School Name is Required"),
   });
 
-  const { control, handleSubmit, formState: { errors, isSubmitting, isValid }, reset } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
+    reset,
+  } = useForm({
     resolver: yupResolver(getValidationSchema()),
     defaultValues: {
       campaign_name: "",
@@ -550,11 +551,11 @@ export default function AddCampaign() {
       company: "",
       past_company: "",
       school: "",
-    }
+    },
   });
 
   const onSubmitHandler = (data) => {
-    handleBasicSearch(data)
+    handleBasicSearch(data);
   };
   return (
     <div className="newpaddingtoplefgt">
@@ -589,7 +590,7 @@ export default function AddCampaign() {
                         borderRadius: 10,
                       }}
                     >
-                      {loading ? 'Logging Out...' : 'Logout'}
+                      {loading ? "Logging Out..." : "Logout"}
                     </button>
                   </div>
                 )}
@@ -600,7 +601,10 @@ export default function AddCampaign() {
                   </h3>
                   <div className="col-3">
                     <Select
-                      onChange={(e) => { setUseTextInputs(e.value); reset({ company: '', past_company: '', school: '' }); }}
+                      onChange={(e) => {
+                        setUseTextInputs(e.value);
+                        reset({ company: "", past_company: "", school: "" });
+                      }}
                       className="dropdownmenui"
                       defaultValue={{
                         label: `Use default inputs`,
@@ -617,8 +621,9 @@ export default function AddCampaign() {
                   </div>
                 </div>
                 <form onSubmit={handleSubmit(onSubmitHandler)}>
-
-                  <h4 className="blue-1 font6updateadmin mb-4">Campaign Name</h4>
+                  <h4 className="blue-1 font6updateadmin mb-4">
+                    Campaign Name
+                  </h4>
                   <Controller
                     name="campaign_name"
                     control={control}
@@ -635,7 +640,11 @@ export default function AddCampaign() {
                       />
                     )}
                   />
-                  {errors.campaign_name && <div className="text-danger mt-1">{errors.campaign_name.message}</div>}
+                  {errors.campaign_name && (
+                    <div className="text-danger mt-1">
+                      {errors.campaign_name.message}
+                    </div>
+                  )}
 
                   <div className="col-lg-12 py-4">
                     <div className="borderbotm"></div>
@@ -657,7 +666,7 @@ export default function AddCampaign() {
 
                   <div className="row">
                     <div className="col-lg-6 col-sm-6 col-md-6">
-                      <Controller
+                      {/* <Controller
                         name="search_query"
                         control={control}
                         render={({ field }) => (
@@ -667,12 +676,37 @@ export default function AddCampaign() {
                             variant="outlined"
                             className="form-control muiinput"
                             placeholder="Search Query"
-                            value={field.value}
-                            onChange={(e) => field.onChange(e.target.value)}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                           />
                         )}
                       />
-                      {errors.search_query && <div className="text-danger mt-1">{errors.search_query.message}</div>}
+                      {errors.search_query && (
+                        <div className="text-danger mt-1">
+                          {errors.search_query.message}
+                        </div>
+                      )} */}
+                      {!useTextInputs ? (
+                        <TextField
+                          id="outlined-basic"
+                          label="Search query"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Search Query"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                      ) : (
+                        <TextField
+                          id="outlined-basic"
+                          label="Search query"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Search Query"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                      )}
                     </div>
                     {/* <div className="col-lg-6 col-sm-6 col-md-6">
 
@@ -694,9 +728,9 @@ export default function AddCampaign() {
                             )}
                             />
                           {errors.company && <div className="text-danger mt-1">{errors.company.message}</div>}
-                          
+
                           </>
-                        
+
                       ) : (
                         <>
                         <Controller
@@ -715,20 +749,34 @@ export default function AddCampaign() {
                           />
                           {errors.company && <div className="text-danger mt-1">{errors.company.message}</div>}
                         </>
-                        
+
                       )}
                     </div> */}
 
-                    <div className='col-lg-6 col-sm-6 col-md-6'>
+                    <div className="col-lg-6 col-sm-6 col-md-6">
                       {/* <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Search Query' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
 
-                      {
-                        !useTextInputs ?
-
-                          <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Company' value={company} onChange={(e) => setCompany(e.target.value)} />
-                          :
-                          <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Company' value={''} onChange={(e) => setCompany(e.target.value)} />
-                      }
+                      {!useTextInputs ? (
+                        <TextField
+                          id="outlined-basic"
+                          label="Company"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Company"
+                          value={company}
+                          onChange={(e) => setCompany(e.target.value)}
+                        />
+                      ) : (
+                        <TextField
+                          id="outlined-basic"
+                          label="Company"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Company"
+                          value={""}
+                          onChange={(e) => setCompany(e.target.value)}
+                        />
+                      )}
                     </div>
                   </div>
                   {/* <div className="row mt-5">
@@ -824,22 +872,52 @@ export default function AddCampaign() {
                     </div>
                   </div> */}
 
-                  <div className='row mt-5'>
-                    <div className='col-lg-6'>
-                      {
-                        !useTextInputs ?
-                          <TextField id="outlined-basic" label="Past Company" variant="outlined" className='form-control muiinput' placeholder='Past Company' value={pastCompany} onChange={(e) => setPastCompany(e.target.value)} />
-                          :
-                          <TextField id="outlined-basic" label="Past Company" variant="outlined" className='form-control muiinput' placeholder='Past Company' value={''} onChange={(e) => setPastCompany(e.target.value)} />
-                      }
+                  <div className="row mt-5">
+                    <div className="col-lg-6">
+                      {!useTextInputs ? (
+                        <TextField
+                          id="outlined-basic"
+                          label="Past Company"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Past Company"
+                          value={pastCompany}
+                          onChange={(e) => setPastCompany(e.target.value)}
+                        />
+                      ) : (
+                        <TextField
+                          id="outlined-basic"
+                          label="Past Company"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="Past Company"
+                          value={""}
+                          onChange={(e) => setPastCompany(e.target.value)}
+                        />
+                      )}
                     </div>
-                    <div className='col-lg-6'>
-                      {
-                        !useTextInputs ?
-                          <TextField id="outlined-basic" label="School" variant="outlined" className='form-control muiinput' placeholder='School' value={school} onChange={(e) => setSchool(e.target.value)} />
-                          :
-                          <TextField id="outlined-basic" label="School" variant="outlined" className='form-control muiinput' placeholder='School' value={''} onChange={(e) => setSchool(e.target.value)} />
-                      }
+                    <div className="col-lg-6">
+                      {!useTextInputs ? (
+                        <TextField
+                          id="outlined-basic"
+                          label="School"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="School"
+                          value={school}
+                          onChange={(e) => setSchool(e.target.value)}
+                        />
+                      ) : (
+                        <TextField
+                          id="outlined-basic"
+                          label="School"
+                          variant="outlined"
+                          className="form-control muiinput"
+                          placeholder="School"
+                          value={""}
+                          onChange={(e) => setSchool(e.target.value)}
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -862,12 +940,13 @@ export default function AddCampaign() {
                           <Select
                             onChange={handleChangeValue}
                             options={
-                              linkedInAccountArr && linkedInAccountArr.length > 0
+                              linkedInAccountArr &&
+                              linkedInAccountArr.length > 0
                                 ? linkedInAccountArr.map((el) => ({
-                                  label: `${el.name}`,
-                                  value: el._id,
-                                  ...el,
-                                }))
+                                    label: `${el.name}`,
+                                    value: el._id,
+                                    ...el,
+                                  }))
                                 : []
                             }
                           />
@@ -901,7 +980,9 @@ export default function AddCampaign() {
                       <button
                         disabled={loading || showLogin}
                         type={"submit"}
-                        className={`${(!isValid || showLogin) ? "cursor-not-allowed" : ''}`}
+                        className={`${
+                          !isValid || showLogin ? "cursor-not-allowed" : ""
+                        }`}
                         style={{
                           outline: "none",
                           border: "none",
@@ -916,18 +997,26 @@ export default function AddCampaign() {
                       >
                         {loading ? "Searching..." : "Start Searching"}
                       </button>
-                      {
-                        showLogin && (
-                          <>
-                            <p className="fw-bold" style={{ marginBottom: 0 }}>
-                              <i className="fa fa-info-circle" aria-hidden="true" /> Linked Login is required to proceed with New Campaing Creation
-                            </p>
-                            <p className="fw-bold">
-                              <i className="fa fa-info-circle" aria-hidden="true" /> Please make sure to turn off two step verification before login
-                            </p>
-                          </>
-                        )
-                      }
+                      {showLogin && (
+                        <>
+                          <p className="fw-bold" style={{ marginBottom: 0 }}>
+                            <i
+                              className="fa fa-info-circle"
+                              aria-hidden="true"
+                            />{" "}
+                            Linked Login is required to proceed with New
+                            Campaign Creation
+                          </p>
+                          <p className="fw-bold">
+                            <i
+                              className="fa fa-info-circle"
+                              aria-hidden="true"
+                            />{" "}
+                            Please make sure to turn off two step verification
+                            before login
+                          </p>
+                        </>
+                      )}
                       {/* <button disabled={loading} onClick={() => setSchedule(true)} type={"button"} style={{ outline: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, border: "#D68392 solid 1px", marginTop: "15px", backgroundColor: 'white' }}>Set Schedule Date</button> */}
                     </>
                   )}
@@ -1001,10 +1090,14 @@ export default function AddCampaign() {
                   )}
 
                   {/* For Phone interaction */}
-                  {(verification.phoneIntractionRequired && !isLoggedIn) ? (
+                  {verification.phoneIntractionRequired && !isLoggedIn ? (
                     <>
-                      <h6 className="blue-1 mt-2">Click on the button below once the verification is done.</h6>
-                      <h6 className="blue-1 mt-2">{verification.phoneMessage}</h6>
+                      <h6 className="blue-1 mt-2">
+                        Click on the button below once the verification is done.
+                      </h6>
+                      <h6 className="blue-1 mt-2">
+                        {verification.phoneMessage}
+                      </h6>
 
                       <button
                         onClick={() => handlePhoneInteraction()}
@@ -1023,7 +1116,6 @@ export default function AddCampaign() {
                       >
                         {loading ? "Loading..." : "Verified"}
                       </button>
-
 
                       <button
                         onClick={() => resendNotification()}
@@ -1083,9 +1175,7 @@ export default function AddCampaign() {
                       </button>
                     </div>
                   )}
-
                 </form>
-
               </DashboardBox>
 
               {/* <div>
@@ -1149,7 +1239,7 @@ export default function AddCampaign() {
                     </div> */}
           </div>
         </div>
-      </section >
-    </div >
+      </section>
+    </div>
   );
 }
