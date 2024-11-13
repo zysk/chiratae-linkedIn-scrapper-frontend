@@ -29,6 +29,7 @@ import Profile from "../components/Profile/Profile";
 export default function AuthorizedRoutes() {
   let token = useSelector((state) => state.auth.token);
   const sideBarOpen = useSelector((state) => state.auth.sideBarOpen);
+  const authObj = useSelector((state) => state.auth);
 
   useEffect(() => {
     let temptoken = undefined;
@@ -74,7 +75,10 @@ export default function AuthorizedRoutes() {
   return (
     <section style={{ backgroundColor: "#f4f6f8" }}>
       <div className="row">
-        <div className={sideBarOpen ? "sidebar-open" : "sidebar-closed"} style={{ contain: "content" }}>
+        <div
+          className={sideBarOpen ? "sidebar-open" : "sidebar-closed"}
+          style={{ contain: "content" }}
+        >
           <SideBar />
         </div>
         <div
@@ -95,7 +99,12 @@ export default function AuthorizedRoutes() {
             <Route
               exact
               path="/"
-              element={<Navigate to={"/All-leads"} replace />}
+              element={
+                <Navigate
+                  to={authObj?.role === "ADMIN" ? "/All-Leads" : "/My-Leads"}
+                  replace
+                />
+              }
             ></Route>
             <Route exact path="/All-leads" element={<AllLeads />}></Route>
             <Route

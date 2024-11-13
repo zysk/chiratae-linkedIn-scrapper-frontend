@@ -15,10 +15,9 @@ export const loginUser = (formData) => async (dispatch) => {
       let decodedToken = await jwtDecode(response.token);
       localStorage.setItem("token", response.token);
       if (`${decodedToken.role}`.toLowerCase() == "admin") {
-        window.location.href = "/"
-      }
-      else {
-        window.location.href = "/My-Leads"
+        window.location.href = "/";
+      } else {
+        window.location.href = "/My-Leads";
       }
       dispatch({
         type: AUTH_SUCCESS,
@@ -39,11 +38,8 @@ export const loginUser = (formData) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   dispatch({ type: LOGOUT });
   localStorage.removeItem("token");
-
 };
-
 
 export const toggleSideBarFromHeader = () => async (dispatch) => {
   dispatch({ type: sidebarToggle });
-
 };
