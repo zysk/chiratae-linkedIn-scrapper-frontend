@@ -476,7 +476,7 @@ export default function AddCampaign() {
     search_query: "co Founder",
     company: "Stealth, Stealth startup, stealth company",
     past_company: "",
-    school: "Indian Institute of Technology Delhi,Indian Institute of Techn"
+    school: "Indian Institute of Technology Delhi,Indian Institute of Technology Patna,Indian Institute of Technology Kharagpur,Indian Institute of Technology Kanpur,Indian Institute of Technology Roorkee,Indian Institute of Technology Madras,Indian Institute of Technology Bombay,Indian Institute of Management Ahmedabad,Indian Institute of Management Bangalore,Indian Institute of Management Calcutta,Birla Institute of Technology and Science,Shri Ram College of Commerce,Lady Shri Ram College"
   }
 
   const emptyValues = {
