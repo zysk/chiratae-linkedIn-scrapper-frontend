@@ -4,7 +4,6 @@ import { Buffer } from "buffer";
 import Select from "react-select";
 import {
   campaignCheckLogin,
-  campaignCreateForLinkedin,
   campaignSendCaptcha,
   campaignLinklogin,
   logoutAccount,
@@ -63,51 +62,6 @@ export default function AddCampaign() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [useTextInputs, setUseTextInputs] = useState(false);
-
-  const pageSource = ``;
-
-  let schoolArr = [
-    {
-      label: `IIT`,
-      value: "Indian institue of technology",
-    },
-    {
-      label: `BITS`,
-      value: "Birla Institute of Technology and Science",
-    },
-    {
-      label: `IIM A`,
-      value: "IIM A",
-    },
-    {
-      label: `IIM B`,
-      value: "IIM B",
-    },
-    {
-      label: `IIM C`,
-      value: "IIM C",
-    },
-    {
-      label: `SRCC`,
-      value: "Shri Ram College of Commerce",
-    },
-    {
-      label: `LSR`,
-      value: "Lady Shri Ram College",
-    },
-  ];
-
-  let companyArr = [
-    { label: `Stealth`, value: "Stealth" },
-    { label: `Mckinsey`, value: "Mckinsey" },
-    { label: `BCG`, value: "BCG" },
-    { label: `Bain`, value: "Bain" },
-    { label: `Flipkart`, value: "Flipkart" },
-    { label: `Freshworks`, value: "Freshworks" },
-    { label: `Zoho`, value: "Zoho" },
-    { label: `Stealth Startup`, value: "Stealth Startup" },
-    { label: `Stealth Company`, value: "Stealth Company" },
-  ];
 
   useEffect(() => {
     let date = new Date();
@@ -230,19 +184,6 @@ export default function AddCampaign() {
       if (res?.data?.isLogin) {
         checkLoginOnInit();
       }
-      // if (res?.data?.phoneIntractionRequired == false) {
-      //   setVerification(null);
-      //   checkLoginOnInit();
-      //   toastSuccess("Login Successful");
-      // } else if (
-      //   res?.data?.phoneIntractionRequired == false &&
-      //   res?.data?.isCaptcha == false &&
-      //   res?.data?.otpRequired == false
-      // ) {
-      //   checkLoginOnInit();
-      //   toastSuccess("Login Successful");
-      // }
-      // setVerification(null);
     } catch (error) {
       console.log("ress", error);
       toastError(error);
@@ -484,11 +425,6 @@ export default function AddCampaign() {
     setPassword(value.password);
   };
 
-  const handleChangeProxyValue = (value) => {
-    console.log(value);
-    setProxyId(value.value);
-  };
-
   const getValidationSchema = () => {
     return useTextInputs ? schema : schemaDefault;
   };
@@ -511,15 +447,13 @@ export default function AddCampaign() {
       .max(50, "Company Name should not exceed 50 characters"),
     past_company: yup
       .string()
-      // .required("Past Company Name is Required")
-      // .min(3, "Past Company Name should be at least 3 characters")
       .max(50, "Past Company Name should not exceed 50 characters"),
     school: yup
       .string()
       .required("School Name is Required")
       .min(3, "School Name should be at least 3 characters")
       .max(50, "School Name should not exceed 50 characters"),
-  });
+  })
 
   const schemaDefault = yup.object().shape({
     campaign_name: yup
@@ -534,25 +468,38 @@ export default function AddCampaign() {
       .max(50, "Search Query should not exceed 50 characters"),
     company: yup.string().required("Company Name is Required"),
     past_company: yup.string(),
-    // .required("Past Company Name is Required"),
     school: yup.string().required("School Name is Required"),
-  });
+  })
+
+  const defaultValues = {
+    campaign_name: "",
+    search_query: "co Founder",
+    company: "Stealth, Stealth startup, stealth company",
+    past_company: "",
+    school: "Indian Institute of Technology Delhi,Indian Institute of Techn"
+  }
+
+  const emptyValues = {
+    campaign_name: "",
+    search_query: "co Founder",
+    company: "",
+    past_company: "",
+    school: ""
+  }
 
   const {
     control,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid },
     reset,
+    formState: { errors, isSubmitting, isValid }
   } = useForm({
     resolver: yupResolver(getValidationSchema()),
-    defaultValues: {
-      campaign_name: "",
-      search_query: "",
-      company: "",
-      past_company: "",
-      school: "",
-    },
-  });
+    defaultValues: useTextInputs ? emptyValues : defaultValues
+  })
+
+  useEffect(() => {
+    reset(useTextInputs ? emptyValues : defaultValues)
+  }, [useTextInputs, reset])
 
   const onSubmitHandler = (data) => {
     handleBasicSearch(data);
@@ -649,287 +596,84 @@ export default function AddCampaign() {
                   <div className="col-lg-12 py-4">
                     <div className="borderbotm"></div>
                   </div>
-                  {/*
-                              <h6 className="blue-1 mt-1">Or Input One Time Link</h6>
-                              <input type="text" className='form-control' placeholder='One Time Link' value={oneTimeLink} onChange={(e) => setOneTimeLink(e.target.value)} />
 
-                              <h4 className="blue-1 mt-3">Proxy Section</h4>
-                              <Select onChange={handleChangeProxyValue} options={proxiesArr && proxiesArr.length > 0 ? proxiesArr.map(el => ({ label: `${el.value}`, value: el._id, ...el })) : []} />
-                              */}
-
-                  {/* <hr /> */}
                   <h4 className="blue-1 font6updateadmin mb-4">
                     Search query customization
                   </h4>
-                  {/* <TextField id="outlined-basic" label="Search query" variant="outlined" placeholder='Enter Campaign Name' className='form-control muiinput' /> */}
-                  {/* <h6 className="blue-1 mt-2">Search query</h6> */}
 
                   <div className="row">
                     <div className="col-lg-6 col-sm-6 col-md-6">
-                      {/* <Controller
+                      <Controller
                         name="search_query"
                         control={control}
                         render={({ field }) => (
                           <TextField
-                            id="outlined-basic"
-                            label="Search query"
+                            {...field}
+                            label="Search Query"
                             variant="outlined"
-                            className="form-control muiinput"
-                            placeholder="Search Query"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            fullWidth
+                            error={!!errors.search_query}
+                            helperText={errors.search_query?.message}
                           />
                         )}
                       />
-                      {errors.search_query && (
-                        <div className="text-danger mt-1">
-                          {errors.search_query.message}
-                        </div>
-                      )} */}
-                      {!useTextInputs ? (
-                        <TextField
-                          id="outlined-basic"
-                          label="Search query"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Search Query"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                      ) : (
-                        <TextField
-                          id="outlined-basic"
-                          label="Search query"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Search Query"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                      )}
                     </div>
-                    {/* <div className="col-lg-6 col-sm-6 col-md-6">
-
-                      {useTextInputs ? (
-                        <>
-                        <Controller
-                          name="company"
-                          control={control}
-                          render={({ field }) => (
-                              <TextField
-                                id="outlined-basic"
-                                label="Company"
-                                variant="outlined"
-                                className="form-control muiinput"
-                                placeholder="Company"
-                                value={field.value}
-                                onChange={(e) => field.onChange(e.target.value)}
-                              />
-                            )}
-                            />
-                          {errors.company && <div className="text-danger mt-1">{errors.company.message}</div>}
-
-                          </>
-
-                      ) : (
-                        <>
-                        <Controller
-                            name="company"
-                            control={control}
-                            render={({ field }) => (
-                                <Select
-                                  value={
-                                      companyArr.find((el) => el.value === field.value)  || null
-                                  }
-                                  // value={field.value}
-                                  onChange={(e) => field.onChange(e.value)}
-                                  options={companyArr}
-                                />
-                            )}
-                          />
-                          {errors.company && <div className="text-danger mt-1">{errors.company.message}</div>}
-                        </>
-
-                      )}
-                    </div> */}
 
                     <div className="col-lg-6 col-sm-6 col-md-6">
-                      {/* <TextField id="outlined-basic" label="Company" variant="outlined" className='form-control muiinput' placeholder='Search Query' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
 
-                      {!useTextInputs ? (
-                        <TextField
-                          id="outlined-basic"
-                          label="Company"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Company"
-                          value={company}
-                          onChange={(e) => setCompany(e.target.value)}
-                        />
-                      ) : (
-                        <TextField
-                          id="outlined-basic"
-                          label="Company"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Company"
-                          value={""}
-                          onChange={(e) => setCompany(e.target.value)}
-                        />
-                      )}
+                      <Controller
+                        name="company"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="Company"
+                            variant="outlined"
+                            fullWidth
+                            error={!!errors.company}
+                            helperText={errors.company?.message}
+                          />
+                        )}
+                      />
                     </div>
                   </div>
-                  {/* <div className="row mt-5">
-                    <div className="col-lg-6">
-                      {useTextInputs ? (
-                        <>
-                          <Controller
-                            name="past_company"
-                            control={control}
-                            render={({ field }) => (
-                              <>
-                                <TextField
-                                  id="outlined-basic"
-                                  label="Past Company"
-                                  variant="outlined"
-                                  className="form-control muiinput"
-                                  placeholder="Past Company"
-                                  value={field.value}
-                                  onChange={(e) => field.onChange(e.target.value)}
-                                />
-                              </>
-                            )}
-                          />
-                          {errors.past_company && <div className="text-danger mt-1">{errors.past_company.message}</div>}
-                        </>
-
-                      ) : (
-
-                        <>
-                          <Controller
-                            name="past_company"
-                            control={control}
-                            render={({ field }) => (
-                              <>
-                                <Select
-                                  value={
-                                    companyArr.find((el) => el.value === field.value) || null
-                                  }
-                                  onChange={(e) => e ? field.onChange(e.value) : field.onChange("")}
-                                  options={companyArr}
-                                  isClearable
-                                />
-                              </>
-                            )}
-                          />
-                          {errors.past_company && <div className="text-danger mt-1">{errors.past_company.message}</div>}
-                        </>
-
-                      )}
-                    </div>
-                    <div className="col-lg-6">
-                      {useTextInputs ? (
-                        <>
-                          <Controller
-                            name="school"
-                            control={control}
-                            render={({ field }) => (
-                              <>
-                                <TextField
-                                  id="outlined-basic"
-                                  label="School"
-                                  variant="outlined"
-                                  className="form-control muiinput"
-                                  placeholder="School"
-                                  value={field.value}
-                                  onChange={(e) => field.onChange(e.target.value)}
-                                />
-                              </>
-                            )}
-                          />
-                          {errors.school && <div className="text-danger mt-1">{errors.school.message}</div>}
-
-                        </>
-                      ) : (
-                        <>
-                          <Controller
-                            name="school"
-                            control={control}
-                            render={({ field }) => (
-                              <>
-                                <Select
-                                  value={schoolArr.find((el) => el.value === field.value) || null}
-                                  onChange={(e) => field.onChange(e.value)}
-                                  options={schoolArr}
-                                />
-                              </>
-                            )}
-                          />
-                          {errors.school && <div className="text-danger mt-1">{errors.school.message}</div>}
-                        </>
-
-                      )}
-                    </div>
-                  </div> */}
 
                   <div className="row mt-5">
                     <div className="col-lg-6">
-                      {!useTextInputs ? (
-                        <TextField
-                          id="outlined-basic"
-                          label="Past Company"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Past Company"
-                          value={pastCompany}
-                          onChange={(e) => setPastCompany(e.target.value)}
-                        />
-                      ) : (
-                        <TextField
-                          id="outlined-basic"
-                          label="Past Company"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="Past Company"
-                          value={""}
-                          onChange={(e) => setPastCompany(e.target.value)}
-                        />
-                      )}
+                      <Controller
+                        name="past_company"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="Past Company"
+                            variant="outlined"
+                            fullWidth
+                            error={!!errors.past_company}
+                            helperText={errors.past_company?.message}
+                          />
+                        )}
+                      />
                     </div>
                     <div className="col-lg-6">
-                      {!useTextInputs ? (
-                        <TextField
-                          id="outlined-basic"
-                          label="School"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="School"
-                          value={school}
-                          onChange={(e) => setSchool(e.target.value)}
-                        />
-                      ) : (
-                        <TextField
-                          id="outlined-basic"
-                          label="School"
-                          variant="outlined"
-                          className="form-control muiinput"
-                          placeholder="School"
-                          value={""}
-                          onChange={(e) => setSchool(e.target.value)}
-                        />
-                      )}
+                      <Controller
+                        name="school"
+                        control={control}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            label="School"
+                            variant="outlined"
+                            fullWidth
+                            error={!!errors.school}
+                            helperText={errors.school?.message}
+                          />
+                        )}
+                      />
                     </div>
                   </div>
 
                   <div className="borderbotm mt-5"></div>
-
-                  {/* <input type="text" className='form-control' placeholder='Search Query' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} /> */}
-
-                  {/* <h6 className="blue-1 mt-2">Company</h6> */}
-
-                  {/* <h6 className="blue-1 mt-2">Past Company</h6> */}
-
-                  {/* <h6 className="blue-1 mt-2">School</h6> */}
 
                   {showLogin && (
                     <>
@@ -941,12 +685,12 @@ export default function AddCampaign() {
                             onChange={handleChangeValue}
                             options={
                               linkedInAccountArr &&
-                              linkedInAccountArr.length > 0
+                                linkedInAccountArr.length > 0
                                 ? linkedInAccountArr.map((el) => ({
-                                    label: `${el.name}`,
-                                    value: el._id,
-                                    ...el,
-                                  }))
+                                  label: `${el.name}`,
+                                  value: el._id,
+                                  ...el,
+                                }))
                                 : []
                             }
                           />
@@ -978,11 +722,10 @@ export default function AddCampaign() {
                   {(showLogin == false || (showLogin && !imageData)) && (
                     <>
                       <button
-                        disabled={loading || showLogin}
+                        disabled={isSubmitting || !isValid}
                         type={"submit"}
-                        className={`${
-                          !isValid || showLogin ? "cursor-not-allowed" : ""
-                        }`}
+                        className={`${!isValid || showLogin || isSubmitting ? "cursor-not-allowed" : ""
+                          }`}
                         style={{
                           outline: "none",
                           border: "none",
@@ -1017,7 +760,6 @@ export default function AddCampaign() {
                           </p>
                         </>
                       )}
-                      {/* <button disabled={loading} onClick={() => setSchedule(true)} type={"button"} style={{ outline: "none", width: 300, marginRight: 10, padding: "10px 70px", borderRadius: 10, border: "#D68392 solid 1px", marginTop: "15px", backgroundColor: 'white' }}>Set Schedule Date</button> */}
                     </>
                   )}
 
@@ -1177,66 +919,7 @@ export default function AddCampaign() {
                   )}
                 </form>
               </DashboardBox>
-
-              {/* <div>
-                            <iframe src="http://httpbin.org/ip" frameborder="0" style={{ height: 300, width: 300 }} ></iframe>
-
-                            <div dangerouslySetInnerHTML={{ __html: pageSource }} style={{ minHeight: 1000, minWidth: 1000 }} />
-
-                        </div> */}
             </div>
-
-            {/* <div className="col-12 col-lg-12" >
-                        <DashboardBox className="dashboard-summary">
-                            <h3 className="blue-1">Results     <b>Total results {resultObj?.totalResults}</b>  {loading && 'Loading...'}  </h3>
-                            <hr />
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">S.no</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Current Position & company</th>
-                                        <th scope="col">Location</th>
-                                        <th scope="col">Education</th>
-                                        <th scope="col">Url</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {
-                                        resultsArr && resultsArr.length > 0 && resultsArr.map((el, index) => {
-                                            return (
-                                                <tr key={index}>
-                                                    <th scope="row">{index + 1}</th>
-                                                    <td>{el?.name ? el?.name : "N.A."}</td>
-                                                    <td>{el?.currentPosition ? el?.currentPosition : "N.A."}</td>
-                                                    <td>{el?.location ? el?.location : "N.A."}</td>
-                                                    <td>
-                                                        <ul>
-                                                            {
-                                                                el?.educationArr && el?.educationArr.length > 0 ? el.educationArr.map((el, i) => {
-                                                                    return (
-                                                                        <li key={i}>{i + 1}.) {el}</li>
-                                                                    )
-                                                                })
-                                                                    : "N.A."
-                                                            }
-                                                        </ul>
-
-                                                    </td>
-                                                    <td><a href={`${el?.link}`}>Visit Profile</a></td>
-                                                </tr>
-                                            )
-                                        }
-                                        )
-                                    }
-                                </tbody>
-                            </table>
-
-
-                        </DashboardBox>
-
-                    </div> */}
           </div>
         </div>
       </section>
