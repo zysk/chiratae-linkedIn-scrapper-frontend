@@ -675,7 +675,7 @@ export default function AddCampaign() {
 
                   <div className="borderbotm mt-5"></div>
 
-                  {!showLogin && (
+                  {showLogin && (
                     <>
                       <hr />
                       <h4 className="blue-1">Account Section</h4>
@@ -740,7 +740,7 @@ export default function AddCampaign() {
                       >
                         {loading ? "Searching..." : "Start Searching"}
                       </button>
-                      {!showLogin && (
+                      {showLogin && (
                         <>
                           <p className="fw-bold" style={{ marginBottom: 0 }}>
                             <i
